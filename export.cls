@@ -1,7 +1,7 @@
 Option Compare Database
 'EXPORT QUERIES###########################################################
 'This class is designed to export SQL data to HTML (preview), CSV and Email
-'
+
 'REQUIRED PACKAGES########################################################
 '    Visual Basic For Applications
 '    Microsoft Access 16.0 Object Library
@@ -16,7 +16,10 @@ Option Compare Database
 '    Microsoft Forms 2.0 Object Library (Browse for FO20.DLL)
 
 'EXAMPLES##################################################################
-'    Dim ex As New export
+'    'Auto instancing as it is a fire and forget class without the need to save and hold values
+'    'Alternatively after Dim you can --- Set ex = New export
+
+'    Dim ex As New export 'Auto instancing
 '    ex.csv = "SELECT * FROM tableName"
 '    ex.prieview = Forms!formName!ControlName.RowSource
 '    ex.email = Forms!formName.RecordSource
