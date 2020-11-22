@@ -9,7 +9,7 @@ Option Compare Database
 '    System
 '    Microsoft ActiveX Data Objects 6.1 Library
 '    Microsoft ActiveX Data Objects Recordset 6.0 Library
-'    MicrosoftADO Ext. 6.0 for DDL and Security
+'    Microsoft ADO Ext. 6.0 for DDL and Security
 '    Microsoft Data Access Components Installed Version
 '    Microsoft ADO 3.6 Object Library
 '    Microsoft Outlook 16.0 Object Library
