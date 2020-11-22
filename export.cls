@@ -1,5 +1,18 @@
 Option Compare Database
 'This class is designe to export SQL data to HTML (preview), CSV and Email
+'REQUIRED PACKAGES ########################################################
+'Visual Basic For Applications
+'Microsoft Access 16.0 Object Library
+'OLE Automation
+'System
+'Microsoft ActiveX Data Objects 6.1 Library
+'Microsoft ActiveX Data Objects Recordset 6.0 Library
+'MicrosoftADO Ext. 6.0 for DDL and Security
+'Microsoft Data Access Components Installed Version
+'Microsoft ADO 3.6 Object Library
+'Microsoft Outlook 16.0 Object Library
+'Microsoft Forms 2.0 Object Library (Browse for FO20.DLL)
+'##########################################################################
 'Dim ex as New export
 'ex.csv = "SELECT ..."
 'ex.prieview = "SELECT ..."
