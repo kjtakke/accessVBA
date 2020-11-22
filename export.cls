@@ -1,6 +1,6 @@
 Option Compare Database
 'EXPORT QUERIES###########################################################
-'This class is designe to export SQL data to HTML (preview), CSV and Email
+'This class is designed to export SQL data to HTML (preview), CSV and Email
 '
 'REQUIRED PACKAGES########################################################
 '    Visual Basic For Applications
