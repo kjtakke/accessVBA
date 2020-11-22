@@ -1,5 +1,6 @@
 Option Compare Database
 'This class is designe to export SQL data to HTML (preview), CSV and Email
+'
 'REQUIRED PACKAGES ########################################################
 'Visual Basic For Applications
 'Microsoft Access 16.0 Object Library
@@ -12,11 +13,12 @@ Option Compare Database
 'Microsoft ADO 3.6 Object Library
 'Microsoft Outlook 16.0 Object Library
 'Microsoft Forms 2.0 Object Library (Browse for FO20.DLL)
-'##########################################################################
+'
+'Examples##################################################################
 'Dim ex as New export
 'ex.csv = "SELECT ..."
-'ex.prieview = "SELECT ..."
-'ex.email = "SELECT ..."
+'ex.prieview = Forms!FormName!ControlName.RowSource
+'ex.email = Forms!FormName.RecordSource
 
 
 Public Property Let preview(SQL As String)
