@@ -98,3 +98,10 @@
 '		HTML_Array as Variant
 '		HTML_Column_Count as Integer
 '		HTML_Row_Count as Integer
+'
+'COLORS
+'	black: #000000	rgb(0,0,0)
+'	
+'COLOR SETS
+'	default: [red, green, ...]
+'	...: [..., ..., ...]
