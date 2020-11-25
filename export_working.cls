@@ -23,6 +23,20 @@
 '	Private: _finctionName
 '	Public: finctionName
 '
+'	Private Variables:
+'		variant: a_VariableName
+'		string: s_VariableName
+'		integer: i_VariableName
+'		boolean: b_VariableName
+'		double: d_VariableName
+'		collection: c_VariableName
+'		object: o_VariableName:
+'			o_file
+'			o_fileInstance
+'			o_mail
+'		Counters:
+'			_i_, j_, _k_, _h_ as Single
+'
 'ELEMENTS
 '	Properties:
 '		init_HTML
@@ -79,3 +93,8 @@
 '		metricClasses
 '		true_false
 '		colors
+'
+'	Public Variables:
+'		HTML_Array as Variant
+'		HTML_Column_Count as Integer
+'		HTML_Row_Count as Integer
