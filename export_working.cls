@@ -18,6 +18,11 @@
 '	Charts.JS
 '	Bootstrap 4
 '	HTML 5
+'	fontsAwsome
+'
+'REFRENCES
+'	
+'
 '
 'NAMING COVENTIONS
 '	Private: _finctionName
@@ -93,6 +98,7 @@
 '		metricClasses
 '		true_false
 '		colors
+'		icons
 '
 '	Public Variables:
 '		HTML_Array as Variant
@@ -105,3 +111,10 @@
 'COLOR SETS
 '	default: [red, green, ...]
 '	...: [..., ..., ...]
+'
+'FONTS
+'
+'
+'ICONS
+'
+'
