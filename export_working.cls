@@ -54,6 +54,7 @@
 '		compile
 '
 '	Public Functions:
+'		SQL_to_array() as Variant
 '		HTML_dimentions() as Variant
 '		table() as Variant
 '		metric() as Variant
@@ -82,7 +83,6 @@
 '		SQL_to_json()
 '		
 '	Private Functions:
-'		pv_SQL_to_array() as Variant
 '		pv_dimentionCount() as Integer
 '		pv_chartTemplate() as String
 '		pv_HTMLTemplate() as String
@@ -90,6 +90,8 @@
 '		pv_scriptTagTemplate() as String
 '		pv_styleTemplate() as String
 '		pv_scriptTemplate() as String
+'		pv_icon_Template() as String
+'		pv_metric_Template as String
 '
 '	Private Subs:
 '		pv_barChart()
@@ -119,6 +121,11 @@
 '		HTML_Dictionary as Dictionary
 '		HTML_Script as String
 '		HTML_Style as String
+'		HTML_File_Path as String
+'		HTML_File_Name as String
+'		Colors as Variant
+'		Fonts as Variant
+'		Icons as Variant
 '
 '	Private Constants:
 '		pv_bootstrapCSS
