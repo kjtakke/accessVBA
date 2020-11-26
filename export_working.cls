@@ -177,7 +177,7 @@
 '	'Add HTML Elements
 '	d.add_Element = d.heading(2,1,1,MH)
 '	d.add_Element = d.table(2,1,SQL_Sales)
-'	d.add_Element = d.chart(2,2,SQL_Metrics)
+'	d.add_Element = d.chart(2,2,pie,SQL_Metrics)
 '
 '	'Compile and export HTML Document
 '	d.Compile = compile_and_export()
