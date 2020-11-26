@@ -25,7 +25,7 @@
 '
 '
 'NAMING COVENTIONS
-'	Private: _finctionName
+'	Private: pv_finctionName
 '	Public: finctionName
 '
 '	Private Variables:
@@ -41,7 +41,7 @@
 '			o_fileInstance
 '			o_mail
 '		Counters:
-'			_i_, _j_, _k_, _h_ as Single
+'			i, j, k, h as Single
 '
 'ELEMENTS
 '	Properties:
@@ -82,24 +82,24 @@
 '		SQL_to_json()
 '		
 '	Private Functions:
-'		_SQL_to_array() as Variant
-'		_dimentionCount() as Integer
-'		_chartTemplate() as String
-'		_HTMLTemplate() as String
-'		_styleTagTemplate() as String
-'		_scriptTagTemplate() as String
-'		_styleTemplate() as String
-'		_scriptTemplate() as String
+'		pv_SQL_to_array() as Variant
+'		pv_dimentionCount() as Integer
+'		pv_chartTemplate() as String
+'		pv_HTMLTemplate() as String
+'		pv_styleTagTemplate() as String
+'		pv_scriptTagTemplate() as String
+'		pv_styleTemplate() as String
+'		pv_scriptTemplate() as String
 '
 '	Private Subs:
-'		_barChart()
-'		_hBarChart()
-'		_pieChart()
-'		_lineChart()
-'		_table()
-'		_div()
-'		_metric()
-'		_heading()
+'		pv_barChart()
+'		pv_hBarChart()
+'		pv_pieChart()
+'		pv_lineChart()
+'		pv_table()
+'		pv_div()
+'		pv_metric()
+'		pv_heading()
 '
 '	Enums:
 '		fonts
@@ -121,13 +121,13 @@
 '		HTML_Style as String
 '
 '	Private Constants:
-'		_bootstrapCSS
-'		_bootstrapJS
-'		_chartsCSS
-'		_chartsJS
-'		_jQuery
-'		_fontsAwsomeCSS
-'		_fontsAwsomeJS
+'		pv_bootstrapCSS
+'		pv_bootstrapJS
+'		pv_chartsCSS
+'		pv_chartsJS
+'		pv_jQuery
+'		pv_fontsAwsomeCSS
+'		pv_fontsAwsomeJS
 '
 'COLORS
 '	black: #000000	rgb(0,0,0)
