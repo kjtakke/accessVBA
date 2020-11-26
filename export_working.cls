@@ -54,6 +54,7 @@
 '		compile
 '
 '	Public Functions:
+'		HTML_dimentions() as Variant
 '		table() as Variant
 '		metric() as Variant
 '		chart() as Variant
@@ -141,3 +142,44 @@
 'ICONS
 '
 '
+'PROPERTY DETAILS
+'	Public Property Set init_HTML(var as Variant)
+'		LINKED Functions:
+'			#Sets HTML properties 
+'			HTML_dimentions() as Variant
+'
+'		Select Case True
+'			Case = var(0)
+'				#Process
+'			Case Else
+'				#Error Message
+'
+'		EXAMPLE
+'		Dim d as export
+'		Set d = New export
+'		d.init_HTML = HTML_dimentions(5,5)
+'
+'
+'EXAMPLES
+'
+'Sub btn_click()
+'
+'	Const SQL_Sales = "SELECT ..."
+'	Const SQL_Sales = "SELECT ..."
+'	Const MH = "My Page Heading"
+'
+'	Dim d as export
+'	Set d = New export
+'
+'	'Set HTML Document's rows and columns
+'	d.init_HTML = HTML_dimentions(5,5)
+'
+'	'Add HTML Elements
+'	d.add_Element = d.heading(2,1,1,MH)
+'	d.add_Element = d.table(2,1,SQL_Sales)
+'	d.add_Element = d.chart(2,2,SQL_Metrics)
+'
+'	'Compile and export HTML Document
+'	d.Compile = compile_and_export()
+'
+'End Sub
