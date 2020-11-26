@@ -35,6 +35,7 @@
 '		boolean: b_VariableName
 '		double: d_VariableName
 '		collection: c_VariableName
+'		dictionary: dict_VariableName
 '		object: o_VariableName:
 '			o_file
 '			o_fileInstance
@@ -50,6 +51,7 @@
 '		preview
 '		email
 '		csv
+'		compile
 '
 '	Public Functions:
 '		table() as Variant
@@ -64,12 +66,20 @@
 '		scriptBottom() as Variant
 '		scriptBottomLink() as Variant
 '		export() as Variant
+'		compile_to_string() as String
+'		compile_to_array() as Variant
+'		compile_and_store() as Variant
+'		compile_and_export() as Variant
+'		compile_and_export_all() as Variant
+'		export_all() as Variant
+'		export_key() as Variant
+'		export_variable() as Variant
 '
 '	Public Subs:
 '		to_Clipboard()
 '		SQL_to_JS_array()
 '		SQL_to_json()
-'
+'		
 '	Private Functions:
 '		_SQL_to_array() as Variant
 '		_dimentionCount() as Integer
@@ -104,6 +114,19 @@
 '		HTML_Array as Variant
 '		HTML_Column_Count as Integer
 '		HTML_Row_Count as Integer
+'		HTML_Settings as Variant
+'		HTML_Dictionary as Dictionary
+'		HTML_Script as String
+'		HTML_Style as String
+'
+'	Private Constants:
+'		_bootstrapCSS
+'		_bootstrapJS
+'		_chartsCSS
+'		_chartsJS
+'		_jQuery
+'		_fontsAwsomeCSS
+'		_fontsAwsomeJS
 '
 'COLORS
 '	black: #000000	rgb(0,0,0)
