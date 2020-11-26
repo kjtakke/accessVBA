@@ -41,7 +41,7 @@
 '			o_fileInstance
 '			o_mail
 '		Counters:
-'			_i_, j_, _k_, _h_ as Single
+'			_i_, _j_, _k_, _h_ as Single
 '
 'ELEMENTS
 '	Properties:
