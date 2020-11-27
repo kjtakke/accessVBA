@@ -49,6 +49,8 @@
 '
 '	Public Functions
 '		SQL_to_array() as Variant
+'		SQL_to_JS_array() as Variant
+'		SQL_to_json() as String
 '
 '
 '	Public Subs:
@@ -74,8 +76,6 @@
 '		export_key()
 '		export_variable()
 '		to_Clipboard()
-'		SQL_to_JS_array()
-'		SQL_to_json()
 '		
 '	Private Functions:
 '		pv_dimentionCount() as Integer
