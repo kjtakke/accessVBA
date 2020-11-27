@@ -45,16 +45,13 @@
 '
 'ELEMENTS
 '	Properties:
-'		init_HTML
-'		add_Element
-'		export_HTML_File
-'		preview
-'		email
-'		csv
-'		compile
 '
-'	Public Functions:
+'
+'	Public Functions
 '		SQL_to_array() as Variant
+'
+'
+'	Public Subs:
 '		HTML_dimentions() as Variant
 '		table() as Variant
 '		metric() as Variant
@@ -76,8 +73,6 @@
 '		export_all() as Variant
 '		export_key() as Variant
 '		export_variable() as Variant
-'
-'	Public Subs:
 '		to_Clipboard()
 '		SQL_to_JS_array()
 '		SQL_to_json()
@@ -92,16 +87,6 @@
 '		pv_scriptTemplate() as String
 '		pv_icon_Template() as String
 '		pv_metric_Template as String
-'
-'	Private Subs:
-'		pv_barChart()
-'		pv_hBarChart()
-'		pv_pieChart()
-'		pv_lineChart()
-'		pv_table()
-'		pv_div()
-'		pv_metric()
-'		pv_heading()
 '
 '	Enums:
 '		fonts
@@ -149,23 +134,6 @@
 'ICONS
 '
 '
-'PROPERTY DETAILS
-'	Public Property Set init_HTML(var as Variant)
-'		LINKED Functions:
-'			#Sets HTML properties 
-'			HTML_dimentions() as Variant
-'
-'		Select Case True
-'			Case = var(0)
-'				#Process
-'			Case Else
-'				#Error Message
-'
-'		EXAMPLE
-'		Dim d as export
-'		Set d = New export
-'		d.init_HTML = HTML_dimentions(5,5)
-'
 '
 'EXAMPLES
 '
@@ -179,14 +147,14 @@
 '	Set d = New export
 '
 '	'Set HTML Document's rows and columns
-'	d.init_HTML = HTML_dimentions(5,5)
+'	d.HTML_dimentions(5,5)
 '
 '	'Add HTML Elements
-'	d.add_Element = d.heading(2,1,1,MH)
-'	d.add_Element = d.table(2,1,SQL_Sales)
-'	d.add_Element = d.chart(2,2,"pie",SQL_Metrics)
+'	d.heading(2,1,1,MH)
+'	d.table(2,1,SQL_Sales)
+'	d.chart(2,2,"pie",SQL_Metrics)
 '
 '	'Compile and export HTML Document
-'	d.Compile = compile_and_export()
+'	d.compile_and_export()
 '
 'End Sub
