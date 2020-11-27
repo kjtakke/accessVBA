@@ -52,27 +52,27 @@
 '
 '
 '	Public Subs:
-'		HTML_dimentions() as Variant
-'		table() as Variant
-'		metric() as Variant
-'		chart() as Variant
-'		heading() as Variant
-'		div() as Variant
-'		styleLink() as Variant
-'		style() as Variant
-'		scriptTopLink() as Variant
-'		scriptTop() as Variant
-'		scriptBottom() as Variant
-'		scriptBottomLink() as Variant
-'		export() as Variant
-'		compile_to_string() as String
-'		compile_to_array() as Variant
-'		compile_and_store() as Variant
-'		compile_and_export() as Variant
-'		compile_and_export_all() as Variant
-'		export_all() as Variant
-'		export_key() as Variant
-'		export_variable() as Variant
+'		HTML_dimentions()
+'		add_table()
+'		add_metric()
+'		add_chart()
+'		add_heading()
+'		add_div()
+'		add_styleLink()
+'		add_style()
+'		add_scriptTopLink()
+'		add_scriptTop()
+'		add_scriptBottom()
+'		add_scriptBottomLink()
+'		export()
+'		compile_to_string()
+'		compile_to_array()
+'		compile_and_store()
+'		compile_and_export()
+'		compile_and_export_all()
+'		export_all()
+'		export_key()
+'		export_variable()
 '		to_Clipboard()
 '		SQL_to_JS_array()
 '		SQL_to_json()
@@ -150,9 +150,9 @@
 '	d.HTML_dimentions(5,5)
 '
 '	'Add HTML Elements
-'	d.heading(2,1,1,MH)
-'	d.table(2,1,SQL_Sales)
-'	d.chart(2,2,"pie",SQL_Metrics)
+'	d.add_heading(2,1,1,MH)
+'	d.add_table(2,1,SQL_Sales)
+'	d.add_chart(2,2,"pie",SQL_Metrics)
 '
 '	'Compile and export HTML Document
 '	d.compile_and_export()
