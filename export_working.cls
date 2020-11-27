@@ -1,6 +1,10 @@
 'EXPORT CLASS
 'This class is designed to create web dashboards in Microsoft Access
 '
+'IMPORT CLASS
+'
+'
+'
 'REQUIRED PACKAGES
 '	Visual Basic For Applications
 '	Microsoft Access 16.0 Object Library
