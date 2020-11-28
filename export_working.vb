@@ -1,10 +1,6 @@
 'EXPORT CLASS
 'This class is designed to create web dashboards in Microsoft Access
 '
-'IMPORT CLASS
-'
-'
-'
 'REQUIRED PACKAGES
 '	Visual Basic For Applications
 '	Microsoft Access 16.0 Object Library
@@ -23,6 +19,7 @@
 '	Bootstrap 4
 '	HTML 5
 '	fontsAwsome
+' jQuery
 '
 'REFRENCES
 '
@@ -34,8 +31,8 @@
 '
 '	Private Variables:
 '		variant: a_VariableName
-'		string: s_VariableName
-'		integer: i_VariableName
+'		String: s_VariableName
+'		Integer: i_VariableName
 '		boolean: b_VariableName
 '		double: d_VariableName
 '		collection: c_VariableName
@@ -47,84 +44,6 @@
 '		Counters:
 '			i, j, k, h as Single
 '
-'ELEMENTS
-'	Properties:
-'
-'
-'	Public Functions
-'		SQL_to_array() as Variant
-'		SQL_to_JS_array() as Variant
-'		SQL_to_json() as String
-'
-'
-'	Public Subs:
-'		HTML_dimentions()
-'		add_table()
-'		add_metric()
-'		add_chart()
-'		add_heading()
-'		add_div()
-'		add_styleLink()
-'		add_style()
-'		add_scriptTopLink()
-'		add_scriptTop()
-'		add_scriptBottom()
-'		add_scriptBottomLink()
-'		export()
-'		compile_to_string()
-'		compile_to_array()
-'		compile_and_store()
-'		compile_and_export()
-'		compile_and_export_all()
-'		export_all()
-'		export_key()
-'		export_variable()
-'		to_Clipboard()
-'
-'	Private Functions:
-'		pv_dimentionCount() as Integer
-'		pv_chartTemplate() as String
-'		pv_HTMLTemplate() as String
-'		pv_styleTagTemplate() as String
-'		pv_scriptTagTemplate() as String
-'		pv_styleTemplate() as String
-'		pv_scriptTemplate() as String
-'		pv_icon_Template() as String
-'		pv_metric_Template as String
-'
-'	Enums:
-'		fonts
-'		tableClasses
-'		chartType
-'		headings
-'		metricClasses
-'		true_false
-'		colors
-'		icons
-'
-'	Public Variables:
-'		HTML_Array as Variant
-'		HTML_Column_Count as Integer
-'		HTML_Row_Count as Integer
-'		HTML_Settings as Variant
-'		HTML_Dictionary as Dictionary
-'		HTML_Script as String
-'		HTML_Style as String
-'		HTML_File_Path as String
-'		HTML_File_Name as String
-'		Colors as Variant
-'		Fonts as Variant
-'		Icons as Variant
-'
-'	Public Constants:
-'		bootstrapCSS
-'		bootstrapJS
-'		chartsCSS
-'		chartsJS
-'		jQuery
-'		fontsAwsomeCSS
-'		fontsAwsomeJS
-'
 'COLORS
 '	black: #000000	rgb(0,0,0)
 '
@@ -132,11 +51,7 @@
 '	default: [red, green, ...]
 '	...: [..., ..., ...]
 '
-'FONTS
-'
-'
 'ICONS
-'
 '
 '
 'EXAMPLES
@@ -166,13 +81,14 @@
 
 'Public Constants:
 
-public const bootstrapCSS as string = "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>"
-public const bootstrapJS  as string = "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>"
-public const chartsJS  as string = "<script src='https://cdn.jsdelivr.net/npm/chart.js@2.8.0'></script>"
-public const jQuery  as string = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'>"
-public const fontsAwsomeCSS  as string = "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
-public const googleapis as string = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>"
+public const bootstrapCSS as String = "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>"
+public const bootstrapJS  as String = "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>"
+public const chartsJS  as String = "<script src='https://cdn.jsdelivr.net/npm/chart.js@2.8.0'></script>"
+public const jQuery  as String = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'>"
+public const fontsAwsomeCSS  as String = "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
+public const googleapis as String = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>"
 public const cloudflare as String = "<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js'></script>"
+
 
 'Public Variables:
 
@@ -189,7 +105,7 @@ public HTML_Elements_Count as Integer
 
 Public Current_Colors as Variant
 Public Current_Icon as Variant
-public Current_SQL as string
+public Current_SQL as String
 public Current_Array as Variant
 public Current_Row as Integer
 public Current_Column as Integer
@@ -254,16 +170,24 @@ End Enum
 
 'Public Subs:
 
-	Sub HTML_dimentions(rows as integer, columns as integer, optional fileName as string, optional filepath as string)
+	Sub HTML_dimentions(rows as Integer, columns as Integer, optional fileName as String, optional filepath as String)
+		'This Sub sets the dimentsions for the HTML Document
+
+		'Optional Arguments
 		If Len(fileName) = 0 then fileName = "Report"
 		If Len(fileName) = 0 then filepath = "C:\Users\" & Environ("Username") & "\Desktop\"
+
+		'Load Public Variables
 		fileName = fileName & ".html"
 		filepath = filepath & fileName
 		HTML_Column_Count = Columns
 		HTML_Row_Count = rows
 		HTML_File_Name = fileName
 		HTML_File_Path = filepath
+
+		'Set HTML_Array Dimentsions (BASE 1)
 		Redim HTML_Array(1 to rows, 1 to columns)
+
 	End Sub
 
 	'Add Elements
@@ -328,7 +252,7 @@ End Enum
 
 'Public Functions
 
-	Public Function SQL_to_array(SQL as string) as Variant
+	Public Function SQL_to_array(SQL as String) as Variant
 		Dim o_rst As DAO.Recordset
 		Dim a_SQL as variant
 		Dim a_varField As Variant
@@ -366,15 +290,15 @@ End Enum
 
 	End Function
 
-	Public Function SQL_to_JS_array(SQL as string) as Variant
+	Public Function SQL_to_JS_array(SQL as String) as Variant
 
 	End Function
 
-	Public Function SQL_to_json(SQL as string) as String
+	Public Function SQL_to_json(SQL as String) as String
 
 	End Function
 
-	Public Function compile_to_string() as String
+	Public Function compile_to_String() as String
 
 	End Function
 
