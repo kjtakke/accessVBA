@@ -233,9 +233,21 @@ Sub HTML_dimentions(rows as integer, columns as integer, optional fileName as st
 
 end sub
 
-'		add_table()
-'		add_metric()
-'		add_chart()
+Sub add_table()
+
+
+end sub
+
+Sub add_metric()
+
+
+end sub
+
+Sub add_chart()
+
+
+end sub
+
 '		add_heading()
 '		add_div()
 '		add_styleLink()
