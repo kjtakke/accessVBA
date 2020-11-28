@@ -113,6 +113,7 @@ public Current_SQL as String
 public Current_Array as Variant
 public Current_Row as Integer
 public Current_Column as Integer
+Public Current_Dim_Count
 
 Public h as single
 Public i as single
@@ -120,14 +121,27 @@ Public j as single
 Public k as single
 
 
-'Enums:
+'Enumerations:
 
 Public Enum tableClasses
-	borderless
-	hover
-	striped
-	border
+	'table
+	table
+	'table table-striped
+	table_striped
+	'table table-bordered
+	table_bordered
+	'table table-hover
+	table_hover
+	'table table-dark
+	table_dark
+	'table table-dark table-striped
+	table_dark_striped
+	'table table-dark table-hover
+	table_dark_hover
+	'table table-borderless
+	table_borderless
 End Enum
+
 
 Public Enum chartType
 	line
@@ -138,6 +152,7 @@ Public Enum chartType
 	donut
 End Enum
 
+
 Public Enum headings
 	H1
 	H2
@@ -147,7 +162,7 @@ Public Enum headings
 	H6
 End Enum
 
-Public Enum headings
+Public Enum metrics
 	Success
 	Info
 	Warning
@@ -158,14 +173,18 @@ Public Enum headings
 	Light
 End Enum
 
-Public Enum headings
+
+Public Enum bools
 	true
 	false
 End Enum
 
+
 Public Enum colors
 
+
 End Enum
+
 
 Public Enum icons
 
@@ -175,7 +194,7 @@ End Enum
 
 'Public Subs:
 
-	Sub HTML_Setup(rows as Integer, columns as Integer, optional fileName as String, optional filepath as String, optional heading as string, optional title as string)
+	Sub HTML_Setup(rows as Integer, columns as Integer, optional fileName as String = "", optional filepath as String = "", optional heading as string = "", optional title as string = "")
 		'This Sub sets the dimentsions for the HTML Document
 
 		'Optional Arguments
@@ -216,20 +235,110 @@ End Enum
 
 	End Sub
 
+
 	'Add Elements
-			Sub add_table()
+
+			Sub add_table(row as integer, column as integer, sql as string, optional table_style as string = "", optional table_class as tableClasses = 0, optional table_id as string = "")
+				'This sub creats a HTML Table from SQL->Aray
+
+				Dim s_table_text as string
+				Dim index as Variant
+
+				'SQL to array
+				index = SQL_to_array(sql)
+
+				'Table Tag Optional Arguments
+				s_table_text = "<table "
+				if len(table_style) > 0 then s_table_text = s_table_text & "style='" & table_style & "' "
+
+				if len(table_id) > 0 then s_table_text = s_table_text & "style='" & table_id & "' "
+				s_table_text = s_table_text & ">" & vbNewLine
+
+				if table_class = 0 then
+					s_table_text = s_table_text & "class='table' "
+				else
+					Select Case True
+						'table
+						Case table_class = tableClasses.table
+							s_table_text = s_table_text & "class='table' "
+
+						'table table-striped
+						Case table_class = tableClasses.table_striped
+							s_table_text = s_table_text & "class='table table-striped' "
+
+						'table table-bordered
+						Case table_class = tableClasses.table_bordered
+							s_table_text = s_table_text & "class='table table-bordered' "
+
+						'table table-hover
+						Case table_class = tableClasses.table_hover
+							s_table_text = s_table_text & "class='table table-hover' "
+
+						'table table-dark
+						Case table_class = tableClasses.table_dark
+							s_table_text = s_table_text & "class='table table-dark' "
+
+						'table table-dark table-striped
+						Case table_class = tableClasses.table_dark_striped
+							s_table_text = s_table_text & "class='table table-dark table-striped' "
+
+						'table table-dark table-hover
+						Case table_class = tableClasses.table_dark_hover
+							s_table_text = s_table_text & "class='table table-dark table-hover' "
+
+						'table table-borderless
+						Case table_class = tableClasses.table_borderless
+							s_table_text = s_table_text & "class='table table-borderless' "
+
+						Case Else
+							s_table_text = s_table_text & "class='table' "
+					End Select
+				End If
+
+					s_table_text = s_table_text & ">" & vbNewLine
+
+					'Table Headers
+					s_table_text = s_table_text & "<thead>" & vbNewLine
+					s_table_text = s_table_text & "<tr>" & vbNewLine
+					For i = 1 to Current_Dim_Count
+						s_table_text = s_table_text & "<th>" & vbNewLine
+							s_table_text = s_table_text & index(0,i) & vbNewLine
+						s_table_text = s_table_text & "</th>" & vbNewLine
+					Next i
+					s_table_text = s_table_text & "</tr>" & vbNewLine
+					s_table_text = s_table_text & "</thead>" & vbNewLine
+
+					'Table Body
+					s_table_text = s_table_text & "<tbody>" & vbNewLine
+						for 0 = i to ubound(index)
+							s_table_text = s_table_text & "<tr>" & vbNewLine
+								for j = 0 to Current_Dim_Count
+									s_table_text = s_table_text & index(i,j) & vbNewLine
+								next j
+							s_table_text = s_table_text & "</tr>" & vbNewLine
+						next i
+					s_table_text = s_table_text & "</tbody>" & vbNewLine
+
+				'Table close
+				s_table_text = s_table_text & "</table>"
+
+				'Load s_table_text (HTML) to HTML_Array
+				HTML_Array(row, column) = HTML_Array(row, column) & s_table_text
 
 			End Sub
+
 
 			Sub add_metric()
 
 			End Sub
 
+
 			Sub add_chart()
 
 			End Sub
 
-			Sub add_heading(row as integer, column as integer, heading_tag as Headings, heading_Text as String, Optional heading_style as string, Optional heading_class as string optional heading_id as string)
+
+			Sub add_heading(row as integer, column as integer, heading_tag as Headings, heading_Text as String, Optional heading_style as string = "", Optional heading_class as string = "", optional heading_id as string = "")
 				'This Sub creates a <H1-6> Tag
 				Dim s_heading_text as String
 				Dim s_open_Tag as String
@@ -364,7 +473,7 @@ End Enum
 		Loop
 
 		'Get/Confirm Array Dimentions
-		i_DimCount = arrayDimentionCounter(a_SQL)
+		Curent_Dim_Count = arrayDimentionCounter(a_SQL)
 
 		'Set Public Variables
 		Current_SQL = SQL
@@ -391,40 +500,60 @@ End Enum
 'Private Functions:
 
 	Private Function pv_dimentionCount(index as Variant) as Integer
+	'This Function Counts the Columns/Dimentions in an Array
+	'index is the input array
+
+		On Error GoTo LC:
+		For i = 1 To 100
+				TempVar = index(1, i)
+		Next L
+LC:
+		i = i - 1
+		On Error GoTo 0
+		pv_dimentionCount = i
 
 	End Function
+
 
 	Private Function pv_chartTemplate(index as Variant) as String
 
 	End Function
 
+
 	Private Function pv_HTMLTemplate(index as Variant) as String
 
 	End Function
+
 
 	Private Function pv_styleTagTemplate(index as Variant) as String
 
 	End Function
 
+
 	Private Function pv_scriptTagTemplate(index as Variant) as String
 
 	End Function
+
 
 	Private Function pv_styleTemplate(index as Variant) as String
 
 	End Function
 
-	Private Function pv_scriptTemplate(index as Variant) as String
-
-	End Function
 
 	Private Function pv_scriptTemplate(index as Variant) as String
 
 	End Function
+
+
+	Private Function pv_scriptTemplate(index as Variant) as String
+
+	End Function
+
 
 	Private Function pv_icon_Template(index as Variant) as String
 
 	End Function
+
 
 	Private Function pv_metric_Template(index as Variant) as String
 
