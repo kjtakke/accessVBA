@@ -184,11 +184,17 @@ Public HTML_Settings as Variant
 Public HTML_Dictionary as Dictionary
 Public HTML_Script as String
 Public HTML_Style as String
-Public HTML_File_Path as String
-Public HTML_File_Name as String
-Public Colors as Variant
-Public Fonts as Variant
-Public Icons as Variant
+public HTML_File_Name as String
+public HTML_File_Path as Strng
+public HTML_Elements_Count as Integer
+
+Public Current_Colors as Variant
+Public Current_Icon as Variant
+public Current_SQL as string
+public Current_Array as Variant
+public Current_Row as Integer
+public Current_Column as Integer
+
 Public h as single
 Public i as single
 Public j as single
@@ -204,7 +210,15 @@ Public Enum tableClasses
 	border
 End Enum
 
-'		chartType
+Public Enum chartType
+	line
+	area
+	bar
+	hBar
+	pie
+	donut
+End Enum
+
 '		headings
 '		metricClasses
 '		true_false
