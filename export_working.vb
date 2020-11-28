@@ -100,6 +100,9 @@ Public HTML_Style as String
 public HTML_File_Name as String
 public HTML_File_Path as Strng
 public HTML_Elements_Count as Integer
+public HTML_Title as String
+public HTML_Heading as string
+Public HTML_Heaader as boolean
 
 Public Current_Colors as Variant
 Public Current_Icon as Variant
@@ -169,7 +172,7 @@ End Enum
 
 'Public Subs:
 
-	Sub HTML_dimentions(rows as Integer, columns as Integer, optional fileName as String, optional filepath as String)
+	Sub HTML_Setup(rows as Integer, columns as Integer, optional fileName as String, optional filepath as String, optional heading as string, optional title as string)
 		'This Sub sets the dimentsions for the HTML Document
 
 		'Optional Arguments
@@ -177,6 +180,12 @@ End Enum
 		If Len(fileName) = 0 then filepath = "C:\Users\" & Environ("Username") & "\Desktop\"
 
 		'Load Public Variables
+		If Len(heading) = 0 then
+			HTML_Heaader = False
+		Else
+			HTML_Heaader = true
+		End if
+		If Len(title) = 0 then HTML_Title = "Report"
 		fileName = fileName & ".html"
 		filepath = filepath & fileName
 		HTML_Column_Count = columns
@@ -186,9 +195,17 @@ End Enum
 		HTML_Script = ""
 		HTML_Style = ""
 		HTML_Elements_Count = 0
+		HTML_Heading = heading
 
 		'Set HTML_Array Dimentsions (BASE 1)
 		Redim HTML_Array(1 to rows, 1 to columns)
+
+		'Set each array element to an empty string
+		For i = 1 to rows
+			For j = 1 to columns
+				HTML_Array(i,j) = ""
+			Next j
+		Next i
 
 	End Sub
 
@@ -205,46 +222,103 @@ End Enum
 
 			End Sub
 
-			Sub add_heading()
+			Sub add_heading(row as integer, column as integer, tag as Headings, heading_Text as String, Optional heading_style as string, Optional heading_class as string)
+				'This Sub creates a <H1-6> Tag
+				Dim s_heading_text as String
+				Dim s_open_Tag as String
+				Dim s_close_tag as String
+
+				'Tag
+				Select Case true
+					Case tag = Headings.h1
+						s_open_Tag = "<h1 "
+						s_close_tag = "</h1>"
+					Case tag = Headings.h2
+						s_open_Tag = "<h2 "
+						s_close_tag = "</h2>"
+					Case tag = Headings.h3
+						s_open_Tag = "<h3 "
+						close_tag = "</h3>"
+					Case tag = Headings.h4
+						s_open_Tag = "<h4 "
+						s_close_tag = "</h4>"
+					Case tag = Headings.h5
+						s_open_Tag = "<h5 "
+						s_close_tag = "</h5>"
+					Case tag = Headings.h6
+						s_open_Tag = "<h6 "
+						s_close_tag = "</h6>"
+					Case Else
+						s_open_Tag = "<h1 "
+						s_close_tag = "</h1>"
+				End Select
+
+					s_heading_text = s_open_Tag
+
+				'Optional Arguments
+				If Len(heading_style) > 0 Then
+					s_heading_text = s_heading_text & "Style='" & heading_style & "' "
+				End if
+
+				If Len(heading_class) > 0 Then
+					s_heading_text = s_heading_text & "class='" & heading_class & "' "
+				End if
+
+				'Full Heading text in HTML
+				s_heading_text = s_heading_text & ">" & heading_Text & s_close_tag
+
+				'Heading HTML Text added to HTML_Array
+				HTML_Array(row, column) = HTML_Array(row, column) & s_heading_text
 
 			End Sub
+
 
 			Sub add_div()
 
+
 			End Sub
+
 
 			Sub add_styleLink()
 
 			End Sub
 
+
 			Sub add_style()
 
 			End Sub
+
 
 			Sub add_scriptTopLink()
 
 			End Sub
 
+
 			Sub add_scriptTop()
 
 			End Sub
+
 
 			Sub add_scriptBottom()
 
 			End Sub
 
+
 			Sub add_scriptBottomLink()
 
 			End Sub
+
 
 		'Compile
 				Sub export()
 
 				End Sub
 
+
 				Sub compile_and_export()
 
 				End Sub
+
 
 		'Other
 				Sub to_Clipboard()
