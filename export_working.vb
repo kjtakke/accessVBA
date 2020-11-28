@@ -116,14 +116,14 @@
 '		Fonts as Variant
 '		Icons as Variant
 '
-'	Private Constants:
-'		pv_bootstrapCSS
-'		pv_bootstrapJS
-'		pv_chartsCSS
-'		pv_chartsJS
-'		pv_jQuery
-'		pv_fontsAwsomeCSS
-'		pv_fontsAwsomeJS
+'	Public Constants:
+'		bootstrapCSS
+'		bootstrapJS
+'		chartsCSS
+'		chartsJS
+'		jQuery
+'		fontsAwsomeCSS
+'		fontsAwsomeJS
 '
 'COLORS
 '	black: #000000	rgb(0,0,0)
@@ -161,4 +161,110 @@
 '	'Compile and export HTML Document
 '	d.compile_and_export()
 '
-'End Sub
+'End sub
+
+
+'Public Constants:
+
+public const bootstrapCSS as string = ""
+public const bootstrapJS  as string = ""
+public const chartsCSS  as string = ""
+public const chartsJS  as string = ""
+public const jQuery  as string = ""
+public const fontsAwsomeCSS  as string = ""
+public const fontsAwsomeJS  as string = ""
+
+
+'Public Variables:
+
+Public HTML_Array as Variant
+Public HTML_Column_Count as Integer
+Public HTML_Row_Count as Integer
+Public HTML_Settings as Variant
+Public HTML_Dictionary as Dictionary
+Public HTML_Script as String
+Public HTML_Style as String
+Public HTML_File_Path as String
+Public HTML_File_Name as String
+Public Colors as Variant
+Public Fonts as Variant
+Public Icons as Variant
+Public h as single
+Public i as single
+Public j as single
+Public k as single
+
+
+'Enums:
+
+Public Enum tableClasses
+	borderless
+	hover
+	striped
+	border
+End Enum
+
+'		chartType
+'		headings
+'		metricClasses
+'		true_false
+'		colors
+'		icons
+
+
+'Public Subs:
+
+Sub HTML_dimentions(rows as integer, columns as integer, optional fileName as string, optional filepath as string)
+
+
+end sub
+
+'		add_table()
+'		add_metric()
+'		add_chart()
+'		add_heading()
+'		add_div()
+'		add_styleLink()
+'		add_style()
+'		add_scriptTopLink()
+'		add_scriptTop()
+'		add_scriptBottom()
+'		add_scriptBottomLink()
+'		export()
+'		compile_to_string()
+'		compile_to_array()
+'		compile_and_store()
+'		compile_and_export()
+'		compile_and_export_all()
+'		export_all()
+'		export_key()
+'		export_variable()
+'		to_Clipboard()
+
+
+'Public Functions
+
+Public Function SQL_to_array(SQL as string) as Variant
+
+End function
+
+'		SQL_to_JS_array() as Variant
+'		SQL_to_json() as String
+
+
+
+'Private Functions:
+
+Private Function pv_dimentionCount(index as Variant) as Integer
+
+End function
+
+'		pv_chartTemplate() as String
+'		pv_HTMLTemplate() as String
+'		pv_styleTagTemplate() as String
+'		pv_scriptTagTemplate() as String
+'		pv_styleTemplate() as String
+'		pv_scriptTemplate() as String
+'		pv_icon_Template() as String
+'		pv_metric_Template as String
+'
