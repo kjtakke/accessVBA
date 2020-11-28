@@ -97,6 +97,9 @@ Public HTML_Column_Count as Integer
 Public HTML_Row_Count as Integer
 Public HTML_Script as String
 Public HTML_Style as String
+Public HTML_Script_Top_Links as String
+Public HTML_Script_Bottom_Links as String
+Public HTML_Style_Links as String
 public HTML_File_Name as String
 public HTML_File_Path as Strng
 public HTML_Elements_Count as Integer
@@ -196,7 +199,11 @@ End Enum
 		HTML_Style = ""
 		HTML_Elements_Count = 0
 		HTML_Heading = heading
-
+		HTML_Style = ""
+		HTML_Script = ""
+		HTML_Style_Links = ""
+		HTML_Script_Top_Links = ""
+		HTML_Script_Bottom_Links = ""
 		'Set HTML_Array Dimentsions (BASE 1)
 		Redim HTML_Array(1 to rows, 1 to columns)
 
@@ -222,7 +229,7 @@ End Enum
 
 			End Sub
 
-			Sub add_heading(row as integer, column as integer, tag as Headings, heading_Text as String, Optional heading_style as string, Optional heading_class as string)
+			Sub add_heading(row as integer, column as integer, heading_tag as Headings, heading_Text as String, Optional heading_style as string, Optional heading_class as string optional heading_id as string)
 				'This Sub creates a <H1-6> Tag
 				Dim s_heading_text as String
 				Dim s_open_Tag as String
@@ -230,22 +237,22 @@ End Enum
 
 				'Tag
 				Select Case true
-					Case tag = Headings.h1
+					Case heading_tag = Headings.h1
 						s_open_Tag = "<h1 "
 						s_close_tag = "</h1>"
-					Case tag = Headings.h2
+					Case heading_tag = Headings.h2
 						s_open_Tag = "<h2 "
 						s_close_tag = "</h2>"
-					Case tag = Headings.h3
+					Case heading_tag = Headings.h3
 						s_open_Tag = "<h3 "
 						close_tag = "</h3>"
-					Case tag = Headings.h4
+					Case heading_tag = Headings.h4
 						s_open_Tag = "<h4 "
 						s_close_tag = "</h4>"
-					Case tag = Headings.h5
+					Case heading_tag = Headings.h5
 						s_open_Tag = "<h5 "
 						s_close_tag = "</h5>"
-					Case tag = Headings.h6
+					Case heading_tag = Headings.h6
 						s_open_Tag = "<h6 "
 						s_close_tag = "</h6>"
 					Case Else
@@ -264,48 +271,50 @@ End Enum
 					s_heading_text = s_heading_text & "class='" & heading_class & "' "
 				End if
 
+				If Len(heading_id) > 0 Then
+					s_heading_text = s_heading_text & "id='" & heading_id & "' "
+				End if
+
 				'Full Heading text in HTML
 				s_heading_text = s_heading_text & ">" & heading_Text & s_close_tag
 
 				'Heading HTML Text added to HTML_Array
-				HTML_Array(row, column) = HTML_Array(row, column) & s_heading_text
+				HTML_Array(row, column) = HTML_Array(row, column) & s_heading_text & vbNewLine
 
 			End Sub
 
 
-			Sub add_div()
+			Sub add_div(row as integer, column as integer, div_text as string)
+				'This Sub is used to add custom elements to HTML_Array
 
-
-			End Sub
-
-
-			Sub add_styleLink()
+				HTML_Array(row, column) = HTML_Array(row, column) & div_text
 
 			End Sub
 
 
-			Sub add_style()
-
+			'Script and Style links and code
+			Sub add_styleLink(style_link as string)
+				HTML_Style_Links = HTML_Style_Links & "<link rel='stylesheet' href='"& style_text & "'>" & vbNewLine
 			End Sub
 
 
-			Sub add_scriptTopLink()
-
+			Sub add_style(style_text as string)
+				HTML_Style = HTML_Style & "<Style>" & vbNewLine & style_text & vbNewLine & "</style>" & vbNewLine
 			End Sub
 
 
-			Sub add_scriptTop()
-
+			Sub add_script_top_link(script_Link as string)
+				HTML_Script_Top_Links = HTML_Script_Top_Links & "<script src='"& script_Link & "'>" & vbNewLine
 			End Sub
 
 
-			Sub add_scriptBottom()
-
+			Sub add_scriptBottomLink(script_Link as string)
+				HTML_Script_Bottom_Links = HTML_Script_Bottom_Links & "<script src='"& script_Link & "'>" & vbNewLine
 			End Sub
 
 
-			Sub add_scriptBottomLink()
-
+			Sub  add_scriptBottom(script_Text as string)
+				HTML_Script = HTML_Script & "<script>" & vbNewLine & script_Text & vbNewLine & "</script>" & vbNewLine
 			End Sub
 
 
@@ -377,12 +386,6 @@ End Enum
 	Public Function compile_to_String() as String
 
 	End Function
-
-	Public Function compile_to_array() as Variant
-
-	End Function
-
-
 
 
 'Private Functions:
