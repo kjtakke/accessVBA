@@ -179,7 +179,7 @@ End Enum
 		'Load Public Variables
 		fileName = fileName & ".html"
 		filepath = filepath & fileName
-		HTML_Column_Count = Columns
+		HTML_Column_Count = columns
 		HTML_Row_Count = rows
 		HTML_File_Name = fileName
 		HTML_File_Path = filepath
