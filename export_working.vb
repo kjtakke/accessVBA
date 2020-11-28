@@ -95,8 +95,6 @@ public const cloudflare as String = "<script src='https://cdnjs.cloudflare.com/a
 Public HTML_Array as Variant
 Public HTML_Column_Count as Integer
 Public HTML_Row_Count as Integer
-Public HTML_Settings as Variant
-Public HTML_Dictionary as Dictionary
 Public HTML_Script as String
 Public HTML_Style as String
 public HTML_File_Name as String
@@ -168,6 +166,7 @@ Public Enum icons
 End Enum
 
 
+
 'Public Subs:
 
 	Sub HTML_dimentions(rows as Integer, columns as Integer, optional fileName as String, optional filepath as String)
@@ -184,6 +183,9 @@ End Enum
 		HTML_Row_Count = rows
 		HTML_File_Name = fileName
 		HTML_File_Path = filepath
+		HTML_Script = ""
+		HTML_Style = ""
+		HTML_Elements_Count = 0
 
 		'Set HTML_Array Dimentsions (BASE 1)
 		Redim HTML_Array(1 to rows, 1 to columns)
