@@ -329,40 +329,40 @@ End Enum
 'Public Functions
 
 	Public Function SQL_to_array(SQL as string) as Variant
-		  Dim o_rst As DAO.Recordset
-			Dim a_SQL as variant
-			Dim a_varField As Variant
-			Dim i_DimCount as Integer
+		Dim o_rst As DAO.Recordset
+		Dim a_SQL as variant
+		Dim a_varField As Variant
+		Dim i_DimCount as Integer
 
-			Set o_rst = CurrentDb.OpenRecordset(SQL)
+		Set o_rst = CurrentDb.OpenRecordset(SQL)
 
-	    'Set Array Dimentions
-	    o_rst.MoveLast
-	    ReDim a_SQL(0 to o_rst.RecordCount, 0 to o_rst.Fields.count)
-	    o_rst.MoveFirst
+		'Set Array Dimentions
+		o_rst.MoveLast
+		ReDim a_SQL(0 to o_rst.RecordCount, 0 to o_rst.Fields.count)
+		o_rst.MoveFirst
 
-			'Add Filed Headers To Array
-			For i = 0 To o_rst.Fields.count
-					a_SQL(0,i) = o_rst.Fields(i)
-			Next i
+		'Add Filed Headers To Array
+		For i = 0 To o_rst.Fields.count
+				a_SQL(0,i) = o_rst.Fields(i)
+		Next i
 
-	    'SQL Body to VBA Array
-	    Do While Not o_rst.EOF
-	        For Each a_varField In o_rst.Fields
-	        a_SQL(o_rst.AbsolutePosition + 1, a_varField.OrdinalPosition) = a_varField
-	        Next a_varField
-	        o_rst.MoveNext
-	    Loop
+		'SQL Body to VBA Array
+		Do While Not o_rst.EOF
+		    For Each a_varField In o_rst.Fields
+		    a_SQL(o_rst.AbsolutePosition + 1, a_varField.OrdinalPosition) = a_varField
+		    Next a_varField
+		    o_rst.MoveNext
+		Loop
 
-			'Get/Confirm Array Dimentions
-	    i_DimCount = arrayDimentionCounter(a_SQL)
+		'Get/Confirm Array Dimentions
+		i_DimCount = arrayDimentionCounter(a_SQL)
 
-			'Set Public Variables
-			Current_SQL = SQL
-			Current_Array = a_SQL
+		'Set Public Variables
+		Current_SQL = SQL
+		Current_Array = a_SQL
 
-			'Return Array
-			SQL_to_array = a_SQL
+		'Return Array
+		SQL_to_array = a_SQL
 
 	End Function
 
