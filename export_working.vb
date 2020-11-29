@@ -147,12 +147,12 @@ End Enum
 
 
 Public Enum chartType
-    Line_chart
+    line_chart
     area_chart
     bar_chart
     hBar_chart
     pie_chart
-    donut
+    donut_chart
 End Enum
 
 
@@ -388,13 +388,11 @@ End Enum
                     Dim s_chart_lables As String
                     index = SQL_to_array(sql)
 
-
-
                     Select Case True
-                        Case chart_type = chartType.Line_chart
+                        Case chart_type = chartType.line_chart
 
 
-                        Case chart_type = chartType.bar_chart
+                        Case chart_type = chartType.pie_chart
 
                             'Pie Chart Data
                             s_chart_data = "["
@@ -434,7 +432,7 @@ End Enum
                         Case chart_type = chartType.hBar_chart
 
 
-                        Case chart_type = chartType.pie_chart
+                        Case chart_type = chartType.bar_chart
 
 
                         Case chart_type = chartType.donut_chart
