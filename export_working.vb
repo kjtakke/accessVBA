@@ -176,7 +176,7 @@ Public Enum metrics
     completed
 
     'tile.open background-color: #598bff;
-    Outstanding
+    outstanding
 
 End Enum
 
@@ -332,29 +332,30 @@ End Enum
 
                 Dim s_metric As String
                 Dim s_metric_heading As String
-                Dim s_metric_number As Single
+                Dim s_metric_number As String
+                Dim s_metric_class As String
                 Dim index As Variant
 
                 Select Case True
 
                     'tile.overdue background-color: #f21313;
                     Case metric_class = metrics.overdue
-                        metric_class = "tile overdue"
+                        s_metric_class = "tile overdue"
 
                     'tile.due background-color: #f08f11;
                     Case metric_class = metrics.due
-                        metric_class = "tile due"
+                        s_metric_class = "tile due"
 
                     'tile.completed background-color: #000;
                     Case metric_class = metrics.completed
-                        metric_class = "tile completed"
+                        s_metric_class = "tile completed"
 
                     'tile.open background-color: #598bff;
-                    Case metric_class = metrics.Outstanding
-                        metric_class = "tile open"
+                    Case metric_class = metrics.outstanding
+                        s_metric_class = "tile open"
 
                     Case Else
-                        metric_class = "tile open"
+                        s_metric_class = "tile open"
 
                 End Select
 
@@ -363,14 +364,14 @@ End Enum
 
                 'Assign metric elements
                 s_metric_heading = index(0, 0)
-                s_metric_number = CStr(index(1, 0))
+                s_metric_number = index(1, 0)
 
                 'Optional Arguments added to metric
-                If Len(metric_prefix) > 0 Then s_metric_number = metric_prefix & " " & s_metric_number
-                If Len(metric_sufix) > 0 Then s_metric_number = s_metric_number & " " & metric_sufix
+                If Len(metric_prefix) > 0 Then s_metric_number = metric_prefix & s_metric_number
+                If Len(metric_sufix) > 0 Then s_metric_number = s_metric_number & metric_sufix
 
                 s_metric = "<div align='center'>" & vbNewLine & _
-                                     "<button type='button' name='button' class='" & metric_class & " style='" & metric_style & "' " & "id='" & metric_id & "'>" & _
+                                     "<button type='button' name='button' class='" & s_metric_class & " style='" & metric_style & "' " & "id='" & metric_id & "'>" & _
                                      "<div class='tile-measure'>" & s_metric_number & "</div><br>" & vbNewLine & _
                                      "<span class='tile-comment'>" & s_metric_heading & "</span>" & vbNewLine & _
                                      "</button>" & vbNewLine & _
