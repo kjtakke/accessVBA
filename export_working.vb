@@ -388,8 +388,69 @@ End Enum
 			End Sub
 
 
-			Sub add_chart()
+			Sub add_chart(row as integer, column as integer, sql as string, chart_type as chartType, chart_id as string, optional chart_prefix as string = "", optional chart_sufix as string = "", optional chart_style = "")
 
+					Dim index as variant
+					Dim s_chart_data as string
+					Dim s_chart_lables as string
+					index = SQL_to_array(sql)
+
+
+
+					Select Case true
+						Case chart_type = chartType.line
+
+
+						Case chart_type = chartType.bar
+
+							'Pie Chart Data
+							s_chart_data = "["
+							for i = 1 to ubound(index)
+								if i = ubound(index) then
+									s_chart_data = s_chart_data & index(i,1)
+								Else
+									s_chart_data = s_chart_data & index(i,1) & ", "
+								End If
+							next i
+							s_chart_data = s_chart_data & "]"
+
+							'Pie Chart Lables
+							s_chart_lables = "["
+							for i = 1 to ubound(index)
+								if i = ubound(index) then
+									s_chart_lables = s_chart_lables & index(i,0)
+								Else
+									s_chart_lables = s_chart_lables & index(i,0) & ", "
+								End If
+							next i
+							s_chart_lables = s_chart_lables & "]"
+
+							HTML_Script = HTML_Script & pv_pieChartScript pie_id:= chart_id, pie_data:= s_chart_data, pie_labels:= s_chart_lables, optional pie_prefix:= chart_prefix, optional pie_sufix:= chart_sufix
+
+							HTML_Array(row, column) = & HTML_Array(row, column) & "<div>"
+							HTML_Array(row, column) = & HTML_Array(row, column) & "<table class='charts-table'>"
+							HTML_Array(row, column) = & HTML_Array(row, column) & "<td class='charts-td-50' class='charts-canvas' style='" & chart_style & "'>"
+							HTML_Array(row, column) = & HTML_Array(row, column) & "<canvas id='" & chart_id & "'></canvas>"
+							HTML_Array(row, column) = & HTML_Array(row, column) & "</td>"
+							HTML_Array(row, column) = & HTML_Array(row, column) & "</table>"
+							HTML_Array(row, column) = & HTML_Array(row, column) & "</div>" & vbNewLine
+
+						Case chart_type = chartType.area
+
+
+						Case chart_type = chartType.hBar
+
+
+						Case chart_type = chartType.pie
+
+
+						Case chart_type = chartType.donut
+
+
+						Case Else
+
+
+					End Select
 			End Sub
 
 
@@ -615,6 +676,7 @@ LC:
 	End Function
 
 	Private Function pv_pieChartScript(pie_id, pie_data as string, pie_labels as string, optional pie_prefix as string = "", optional pie_sufix as string = "", optional pie_colors as string = "['#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280']") as string
+		'This Function REturns the <SCRIPT> for a pie chart
 
 		pv_pieChartScript =	"var ctx = document.getElementById('" & pie_id & "').getContext('2d');" & vbNewLine
 			pv_pieChartScript = pv_pieChartScript & "var myPie = new Chart(ctx, {" & vbNewLine
@@ -671,4 +733,7 @@ LC:
 
 	End Function
 
-'css
+
+	Private Function pv_barChartScript(bar_id, bar_data as string, bar_labels as string, optional bar_prefix as string = "", optional bar_sufix as string = "", optional bar_colors as string = "['#9c7280']") as string
+
+	End Function
