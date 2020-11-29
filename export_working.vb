@@ -88,6 +88,7 @@ public const jQuery  as String = "<script src='https://ajax.googleapis.com/ajax/
 public const fontsAwsomeCSS  as String = "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>"
 public const googleapis as String = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>"
 public const cloudflare as String = "<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js'></script>"
+public const dashboardCSS as String = "<link rel='stylesheet' href='https://allform-tech-200815-customer.github.io/page-templates/styles.css'>"
 
 
 'Public Variables:
@@ -163,15 +164,20 @@ Public Enum headings
 End Enum
 
 Public Enum metrics
-	Success
-	Info
-	Warning
-	Danger
-	Primary
-	Secondary
-	Dark
-	Light
+	'tile.overdue background-color: #f21313;
+	overdue
+
+	'tile.due background-color: #f08f11;
+	due
+
+	'tile.completed background-color: #000;
+	completed
+
+	'tile.open background-color: #598bff;
+	open
+
 End Enum
+
 
 
 Public Enum bools
@@ -328,7 +334,56 @@ End Enum
 			End Sub
 
 
-			Sub add_metric()
+			Sub add_metric(row as integer, column as integer, sql as string, optional metric_prefix as string = "", optional metric_sufix as string optional metric_style as string = "", optional metric_class as metrics = 3, optional metric_id as string = "")
+				'This Sub adds a button Metric examples at: https://allform-tech-200815-customer.github.io/page-templates/index.html
+
+				Dim s_metric string
+				Dim s_metric_heading as String
+				Dim s_metric_number as Single
+				Dim index as Variant
+
+				Select Case true
+
+					'tile.overdue background-color: #f21313;
+					Case metric_class = Metrics.overdue
+						metric_class = "tile overdue"
+
+					'tile.due background-color: #f08f11;
+					Case metric_class = Metrics.due
+						metric_class = "tile due"
+
+					'tile.completed background-color: #000;
+					Case metric_class = Metrics.completed
+						metric_class = "tile completed"
+
+					'tile.open background-color: #598bff;
+					Case metric_class = Metrics.open
+						metric_class = "tile open"
+
+					Case Else
+						metric_class = "tile open"
+
+				End Select
+
+				'SQL to array
+				index = SQL_to_array(sql)
+
+				'Assign metric elements
+				s_metric_heading = index(0,0)
+				s_metric_number = CStr(index(1,0))
+
+				'Optional Arguments added to metric
+				If len(metric_prefix) > 0 then s_metric_number = metric_prefix & " " & s_metric_number
+				If len(metric_sufix) > 0 then s_metric_number = s_metric_number & " " & metric_sufix
+
+				s_metric = "<div align='center'>" & vbNewLine & _
+									 "<button type='button' name='button' class='" & metric_class & " style='" & metric_style & "' " & "id='" & metric_id & "'>" & _
+									 "<div class='tile-measure'>" & s_metric_number & "</div><br>" & vbNewLine & _
+						 			 "<span class='tile-comment'>" & s_metric_heading & "</span>" & vbNewLine & _
+						 			 "</button>" & vbNewLine & _
+						 			 "</div>"
+
+				HTML_Array(row, column) = HTML_Array(row, column) & s_metric
 
 			End Sub
 
@@ -558,3 +613,62 @@ LC:
 	Private Function pv_metric_Template(index as Variant) as String
 
 	End Function
+
+	Private Function pv_pieChartScript(pie_id, pie_data as string, pie_labels as string, optional pie_prefix as string = "", optional pie_sufix as string = "", optional pie_colors as string = "['#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280']") as string
+
+		pv_pieChartScript =	"var ctx = document.getElementById('" & pie_id & "').getContext('2d');" & vbNewLine
+			pv_pieChartScript = pv_pieChartScript & "var myPie = new Chart(ctx, {" & vbNewLine
+				pv_pieChartScript = pv_pieChartScript & "type: 'pie'," & vbNewLine
+				pv_pieChartScript = pv_pieChartScript & "data: {" & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "labels: " & pie_labels & "," & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "datasets: [{" & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "backgroundColor: " & pie_colors & "," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "borderColor: '#000'," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "borderWidth: '0px'," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "data: " & pie_data & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "}]," & vbNewLine
+				pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
+				pv_pieChartScript = pv_pieChartScript & "options: {" & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "title: {" & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "text: 'By State'," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "fontStyle: 'bold'," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "fontSize: 20," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "legend: {" & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "labels: {" & vbNewLine
+							pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "tooltips: {" & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "callbacks: {" & vbNewLine
+							' this callback is used to create the tooltip label
+							pv_pieChartScript = pv_pieChartScript & "label: function(tooltipItem, data) {" & vbNewLine
+								' get the data label and data value to display
+							' convert the data value to local string so it uses a comma seperated number
+								pv_pieChartScript = pv_pieChartScript & "var dataLabel = data.labels[tooltipItem.index];" & vbNewLine
+								pv_pieChartScript = pv_pieChartScript & "var value = '"  & pie_prefix & "' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString() + '" & pie_sufix & "';" & vbNewLine
+
+								' make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+								pv_pieChartScript = pv_pieChartScript & "if (Chart.helpers.isArray(dataLabel)) {" & vbNewLine
+									' show value on first line of multiline label
+									' need to clone because we are changing the value
+									pv_pieChartScript = pv_pieChartScript & "dataLabel = dataLabel.slice();" & vbNewLine
+									pv_pieChartScript = pv_pieChartScript & "dataLabel[0] += value;" & vbNewLine
+								pv_pieChartScript = pv_pieChartScript & "} else {" & vbNewLine
+									pv_pieChartScript = pv_pieChartScript & "dataLabel += value;" & vbNewLine
+								pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+
+								' return the text to display on the tooltip
+								pv_pieChartScript = pv_pieChartScript & "return dataLabel;" & vbNewLine
+							pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+						pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+					pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+				pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+			pv_pieChartScript = pv_pieChartScript & "});" & vbNewLine
+
+	End Function
+
+'css
