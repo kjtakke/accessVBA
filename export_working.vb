@@ -108,7 +108,8 @@ Public HTML_File_Path As String
 Public HTML_Elements_Count As Integer
 Public HTML_Title As String
 Public HTML_Heading As String
-Public HTML_Heaader As Boolean
+Public HTML_Header As Boolean
+Public HTML_Composed As String
 
 Public Current_Colors As Variant
 Public Current_Icon As Variant
@@ -196,9 +197,9 @@ End Enum
 
         'Load Public Variables
         If Len(heading) = 0 Then
-            HTML_Heaader = False
+            HTML_Header = False
         Else
-            HTML_Heaader = True
+            HTML_Header = True
         End If
         If Len(Title) = 0 Then HTML_Title = "Report"
         fileName = fileName & ".html"
@@ -365,6 +366,7 @@ End Enum
                 'Assign metric elements
                 s_metric_heading = index(0, 0)
                 s_metric_number = index(1, 0)
+                
 
                 'Optional Arguments added to metric
                 If Len(metric_prefix) > 0 Then s_metric_number = metric_prefix & s_metric_number
@@ -382,13 +384,19 @@ End Enum
             End Sub
 
 
-            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "")
+            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%")
 
                     Dim index As Variant
                     Dim s_chart_data As String
                     Dim s_chart_lables As String
                     index = SQL_to_array(sql)
-
+                    
+                    'Class Canvas
+                    HTML_Array(row, column) = HTML_Array(row, column) & "<div>"
+                    HTML_Array(row, column) = HTML_Array(row, column) & "<canvas id='" & chart_id & "' style='height:" & chart_height & "; " & chart_width & "; " & chart_style & "' class='" & chart_class & "'></canvas>"
+                    HTML_Array(row, column) = HTML_Array(row, column) & "</div>" & vbNewLine
+                            
+                            
                     Select Case True
                         Case chart_type = chartType.line_chart
 
@@ -410,22 +418,15 @@ End Enum
                             s_chart_lables = "["
                             For i = 1 To UBound(index)
                                 If i = UBound(index) Then
-                                    s_chart_lables = s_chart_lables & index(i, 0)
+                                    s_chart_lables = s_chart_lables & "'" & index(i, 0) & "'"
                                 Else
-                                    s_chart_lables = s_chart_lables & index(i, 0) & ", "
+                                    s_chart_lables = s_chart_lables & "'" & index(i, 0) & "'" & ", "
                                 End If
                             Next i
                             s_chart_lables = s_chart_lables & "]"
 
                             HTML_Script = HTML_Script & pv_pieChartScript(chart_id, s_chart_data, s_chart_lables, chart_prefix, chart_sufix)
-
-                            HTML_Array(row, column) = HTML_Array(row, column) & "<div>"
-                            HTML_Array(row, column) = HTML_Array(row, column) & "<table class='charts-table'>"
-                            HTML_Array(row, column) = HTML_Array(row, column) & "<td class='charts-td-50' class='charts-canvas' style='" & chart_style & "'>"
-                            HTML_Array(row, column) = HTML_Array(row, column) & "<canvas id='" & chart_id & "'></canvas>"
-                            HTML_Array(row, column) = HTML_Array(row, column) & "</td>"
-                            HTML_Array(row, column) = HTML_Array(row, column) & "</table>"
-                            HTML_Array(row, column) = HTML_Array(row, column) & "</div>" & vbNewLine
+                        
 
                         Case chart_type = chartType.area_chart
 
@@ -536,13 +537,83 @@ End Enum
 
 
         'Compile
-                Sub export()
-
+                Sub export(Optional loadFile As Boolean = False)
+                    
+                    'File Path to Windows Users Desktop
+                    filepath = HTML_File_Path
+                    Set fs = CreateObject("Scripting.FileSystemObject")
+                    Set a = fs.CreateTextFile(filepath, True)
+                    
+                    'Write and Save HTML File
+                    a.WriteLine HTML_Composed
+                    a.Close
+                    saved = True
+                    
+                    'Open HTML File
+                    Application.FollowHyperlink (filepath)
+    
                 End Sub
 
 
-                Sub compile_and_export()
-
+                Sub compile_and_export(Optional loadFile As Boolean = False)
+                    Call compile
+                    Call export(loadFile)
+                End Sub
+                
+                
+                Sub compile()
+                    'This Sub compiles the HTML Document ready for export
+                    
+                    Dim s_html As String
+                    
+                    'HTML Document Open
+                    s_html = "<!DOCTYPE html><html lang='en'><head><title>"
+                    s_html = s_html & HTML_Title & "</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'>"
+                    
+                    'Script and CSS Links
+                    s_html = s_html & bootstrapCSS & vbNewLine
+                    s_html = s_html & bootstrapJS & vbNewLine
+                    s_html = s_html & chartsJS & vbNewLine
+                    s_html = s_html & jQuery & vbNewLine
+                    s_html = s_html & fontsAwsomeCSS & vbNewLine
+                    s_html = s_html & googleapis & vbNewLine
+                    s_html = s_html & cloudflare & vbNewLine
+                    s_html = s_html & dashboardCSS & vbNewLine
+                    
+                    'User Script and CSS Links
+                    s_html = s_html & HTML_Style_Links & vbNewLine
+                    s_html = s_html & HTML_Style & vbNewLine
+                    s_html = s_html & HTML_Script_Top_Links & vbNewLine
+                    
+                    'HTML Body Open
+                    s_html = s_html & "</head>" & vbNewLine
+                    s_html = s_html & "<body>" & vbNewLine
+                    
+                    'HTML_Array Input
+                    For i = 1 To HTML_Row_Count
+                        s_html = s_html & "<table>" & vbNewLine
+                        s_html = s_html & "<tr>" & vbNewLine
+                        For j = 1 To HTML_Column_Count
+                            
+                            If HTML_Array(i, j) <> "" Then
+                                s_html = s_html & "<td style='vertical-align: top;'>" & vbNewLine
+                                s_html = s_html & HTML_Array(i, j) & vbNewLine
+                                s_html = s_html & "</td>" & vbNewLine
+                            End If
+                        Next j
+                        s_html = s_html & "</tr>" & vbNewLine
+                        s_html = s_html & "</table>" & vbNewLine
+                    Next i
+                    
+                    'User Scipt Links and Scrip Tag
+                    s_html = s_html & HTML_Script_Bottom_Links & vbNewLine
+                    s_html = s_html & "<script>" & vbNewLine & HTML_Script & vbNewLine & "</script>" & vbNewLine
+                    
+                    'HTML Document Close
+                    s_html = s_html & "</body>" & vbNewLine
+                    s_html = s_html & "</html>" & vbNewLine
+                
+                    HTML_Composed = s_html
                 End Sub
 
 
