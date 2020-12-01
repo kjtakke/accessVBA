@@ -188,7 +188,7 @@ End Enum
 
 'Public Subs:
 
-    Sub HTML_Setup(rows As Integer, columns As Integer, Optional fileName As String = "", Optional filepath As String = "", Optional heading As String = "", Optional Title As String = "")
+    Sub HTML_Setup(rows As Integer, columns As Integer, Optional fileName As String = "", Optional filepath As String = "", Optional heading As String = "", Optional title As String = "")
         'This Sub sets the dimentsions for the HTML Document
 
         'Optional Arguments
@@ -201,7 +201,7 @@ End Enum
         Else
             HTML_Header = True
         End If
-        If Len(Title) = 0 Then HTML_Title = "Report"
+        If Len(title) = 0 Then HTML_Title = "Report"
         fileName = fileName & ".html"
         filepath = filepath & fileName
         HTML_Column_Count = columns
@@ -384,7 +384,7 @@ End Enum
             End Sub
 
 
-            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%")
+            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True)
 
                     Dim index As Variant
                     Dim s_chart_data As String
@@ -695,43 +695,6 @@ LC:
     End Function
 
 
-    Private Function pv_chartTemplate(index As Variant) As String
-
-    End Function
-
-
-    Private Function pv_HTMLTemplate(index As Variant) As String
-
-    End Function
-
-
-    Private Function pv_styleTagTemplate(index As Variant) As String
-
-    End Function
-
-
-    Private Function pv_scriptTagTemplate(index As Variant) As String
-
-    End Function
-
-
-    Private Function pv_styleTemplate(index As Variant) As String
-
-    End Function
-
-
-    Private Function pv_scriptTemplate(index As Variant) As String
-
-    End Function
-
-    Private Function pv_icon_Template(index As Variant) As String
-
-    End Function
-
-
-    Private Function pv_metric_Template(index As Variant) As String
-
-    End Function
 
     Private Function pv_pieChartScript(pie_id, pie_data As String, pie_labels As String, Optional pie_prefix As String = "", Optional pie_sufix As String = "", Optional pie_title As String, Optional pie_colors As String = "['#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280']") As String
         'This Function REturns the <SCRIPT> for a pie chart
@@ -791,8 +754,139 @@ LC:
 
     End Function
 
-
-    Private Function pv_barChartScript(bar_id, bar_data As String, bar_labels As String, Optional bar_prefix As String = "", Optional bar_sufix As String = "", Optional bar_colors As String = "['#9c7280']") As String
-
+    Private Function chartDataSets(index As Variant, chart_colors As String, lables As String, chart_type As String) As String
+        Dim s_data As String, a_colors As Variant, s_bgColor As String
+        
+        'Colors Sting to Array
+        a_colors = Split(chart_colors, ",")
+        For i = 0 To UBound(a_colors)
+            a_colors(i) = Trim(a_colors(i))
+        Next i
+               
+        'Loop through each column
+        chartDataSets = ""
+        For i = 1 To Current_Dim_Count
+            
+            'Colors
+            Select Case True
+                Case chart_type = "line"
+                    s_bgColor = "rgba(255,255,255,0)"
+                Case Else
+                    s_bgColor = a_colors(i - 1)
+            End Select
+            
+            'Get data values from columns data
+            s_data = "["
+            For j = 1 To UBound(index)
+                If j = UBound(index) Then
+                    s_data = s_data & index(j, i)
+                Else
+                    s_data = s_data & index(j, i) & ", "
+            Next j
+            s_data = s_data & "]"
+            
+            'Build datasets
+            chartDataSets = chartDataSets & "{" & vbNewLine
+            chartDataSets = chartDataSets & "label:'" & index(0, i) & "'," & vbNewLine
+            chartDataSets = chartDataSets & "backgroundColor: '" & s_bgColor & "'," & vbNewLine
+            chartDataSets = chartDataSets & "borderColor: '" & a_colors(i - 1) & "'," & vbNewLine
+            chartDataSets = chartDataSets & "borderWidth: 3," & vbNewLine
+            chartDataSets = chartDataSets & "data:" & s_data & vbNewLine
+            chartDataSets = chartDataSets & "}," & vbNewLine
+        Next i
+               
+    End Function
+    Private Function pv_barChartScript(chart_id, chart_data As String, chart_labels As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_colors As String = "['#9c7280']", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True) As String
+        pv_barChartScript = ""
+        'pv_barChartScript = pv_barChartScript & "
+        ' & vbNewLine
+        
+        'var ctx = document.getElementById('Chart_1').getContext('2d');
+        ' var chart = new Chart(ctx, {
+        '      ' The type of chart we want to create
+        '      type: 'line',
+        '
+        '      ' The data for our dataset
+        '      data: {
+        '        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        '        datasets: [{
+        'label:           'My First dataset1',
+        'backgroundColor:           'rgba(0, 0, 0,.6)',
+        'borderColor:           'rgba(0, 0, 0, 1)',
+        '          borderWidth: 3,
+        'data:           [3, 22, 51, 12, 20, 12, 15]
+        '        },
+        '        {
+        'label:           'My First dataset2',
+        'backgroundColor:           'rgb(30, 30, 30, .6)',
+        'borderColor:           'rgb(30, 30, 30, 1)',
+        '          borderWidth: 3,
+        'data:           [18, 10, 5, 2, 20, 30, 45]
+        '        },
+        '        {
+        'label:           'My First dataset3',
+        'backgroundColor:           'rgba(80, 80, 80, .6)',
+        'borderColor:           'rgba(80, 80, 80, 1)',
+        '          borderWidth: 3,
+        'data:           [55, 91, 87, 54, 56, 32, 10]
+        '        }]
+        '      },
+        '      options: {
+        '        title: {
+        '          display: true,
+        'text:           'Monthly',
+        'fontStyle:           'bold',
+        '          fontSize: 20,
+        'fontColor:           'black',
+        '        },
+        '        legend: {
+        'position:           'right',
+        'align:           'center',
+        '          display: true,
+        '          labels: {
+        'fontColor:             'rgb(0, 0, 0)'
+        '          }
+        '        },
+        '        scales: {
+        '          yAxes: [{
+        '            stacked: true,
+        '            ticks: {
+        '              beginAtZero: true,
+        'fontColor:               'black'
+        '            },
+        '          }],
+        '          xAxes: [{
+        '            stacked: true,
+        '            ticks: {
+        'fontColor:               'black'
+        '            },
+        '          }]
+        '        },
+        '        tooltips: {
+        '          callbacks: {
+        '            ' this callback is used to create the tooltip label
+        '            label: function(tooltipItem, data) {
+        '              ' get the data label and data value to display
+        '              ' convert the data value to local string so it uses a comma seperated number
+        '              var dataLabel = data.labels[tooltipItem.index];
+        '              var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString() + ' K';
+        '
+        '              ' make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+        '              if (Chart.helpers.isArray(dataLabel)) {
+        '                ' show value on first line of multiline label
+        '                ' need to clone because we are changing the value
+        '                dataLabel = dataLabel.slice();
+        '                dataLabel[0] += value;
+        '              } else {
+        '                dataLabel += value;
+        '              }
+        '
+        '              ' return the text to display on the tooltip
+        '              return dataLabel;
+        '            }
+        '          }
+        '        }
+        '      }
+        '    });
     End Function
 
