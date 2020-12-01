@@ -153,7 +153,6 @@ Public Enum chartType
     bar_chart
     hBar_chart
     pie_chart
-    donut_chart
 End Enum
 
 
@@ -413,6 +412,8 @@ End Enum
                             
                     Select Case True
                         Case chart_type = chartType.line_chart
+                            s_chart_colors = chart_colors
+                            HTML_Script = HTML_Script & pv_ChartScript(chart_id, "line", s_chart_lables, chart_prefix, chart_sufix, s_chart_colors, chart_stacked, chart_legend)
 
 
                         Case chart_type = chartType.pie_chart
@@ -433,19 +434,21 @@ End Enum
                             
                             HTML_Script = HTML_Script & pv_pieChartScript(chart_id, s_chart_data, s_chart_lables, chart_prefix, chart_sufix, pie_title, s_chart_colors)
                         
-
+                        'area
                         Case chart_type = chartType.area_chart
                         
                             s_chart_colors = chart_colors
                             HTML_Script = HTML_Script & pv_ChartScript(chart_id, "area", s_chart_lables, chart_prefix, chart_sufix, s_chart_colors, chart_stacked, chart_legend)
-                        Case chart_type = chartType.hBar_chart
 
-
+                        'bar
                         Case chart_type = chartType.bar_chart
+                            s_chart_colors = chart_colors
+                            HTML_Script = HTML_Script & pv_ChartScript(chart_id, "bar", s_chart_lables, chart_prefix, chart_sufix, s_chart_colors, chart_stacked, chart_legend)
 
-
-                        Case chart_type = chartType.donut_chart
-
+                        'horizontalBar
+                        Case chart_type = chartType.hBar_chart
+                            s_chart_colors = chart_colors
+                            HTML_Script = HTML_Script & pv_ChartScript(chart_id, "horizontalBar", s_chart_lables, chart_prefix, chart_sufix, s_chart_colors, chart_stacked, chart_legend)
 
                         Case Else
 
@@ -779,7 +782,7 @@ LC:
             'Colors
             Select Case True
                 Case chart_type = "line"
-                    s_bgColor = "rgba(255,255,255,0)"
+                    s_bgColor = "'rgba(255,255,255,0)'"
                 Case Else
                     s_bgColor = a_colors(i - 1)
             End Select
