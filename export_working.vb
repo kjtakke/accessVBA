@@ -384,14 +384,26 @@ End Enum
             End Sub
 
 
-            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True)
+            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True, Optional chart_colors As String = "'#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280'")
 
                     Dim index As Variant
                     Dim s_chart_data As String
                     Dim s_chart_lables As String
                     Dim pie_title As String
+                    Dim s_chart_colors As String
                     index = SQL_to_array(sql)
                     pie_title = index(0, 0)
+                    
+                    'Chart Lables
+                            s_chart_lables = "["
+                            For i = 1 To UBound(index)
+                                If i = UBound(index) Then
+                                    s_chart_lables = s_chart_lables & "'" & index(i, 0) & "'"
+                                Else
+                                    s_chart_lables = s_chart_lables & "'" & index(i, 0) & "'" & ", "
+                                End If
+                            Next i
+                            s_chart_lables = s_chart_lables & "]"
                     
                     'Class Canvas
                     HTML_Array(row, column) = HTML_Array(row, column) & "<div>"
@@ -415,24 +427,17 @@ End Enum
                                 End If
                             Next i
                             s_chart_data = s_chart_data & "]"
-
-                            'Pie Chart Lables
-                            s_chart_lables = "["
-                            For i = 1 To UBound(index)
-                                If i = UBound(index) Then
-                                    s_chart_lables = s_chart_lables & "'" & index(i, 0) & "'"
-                                Else
-                                    s_chart_lables = s_chart_lables & "'" & index(i, 0) & "'" & ", "
-                                End If
-                            Next i
-                            s_chart_lables = s_chart_lables & "]"
-
-                            HTML_Script = HTML_Script & pv_pieChartScript(chart_id, s_chart_data, s_chart_lables, chart_prefix, chart_sufix, pie_title)
+                            
+                            s_chart_colors = "[" & chart_colors & "]"
+                            
+                            
+                            HTML_Script = HTML_Script & pv_pieChartScript(chart_id, s_chart_data, s_chart_lables, chart_prefix, chart_sufix, pie_title, s_chart_colors)
                         
 
                         Case chart_type = chartType.area_chart
-
-
+                        
+                            s_chart_colors = chart_colors
+                            HTML_Script = HTML_Script & pv_ChartScript(chart_id, "area", s_chart_lables, chart_prefix, chart_sufix, s_chart_colors, chart_stacked, chart_legend)
                         Case chart_type = chartType.hBar_chart
 
 
@@ -696,66 +701,70 @@ LC:
 
 
 
-    Private Function pv_pieChartScript(pie_id, pie_data As String, pie_labels As String, Optional pie_prefix As String = "", Optional pie_sufix As String = "", Optional pie_title As String, Optional pie_colors As String = "['#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280']") As String
+    Private Function pv_pieChartScript(pie_id, pie_data As String, pie_labels As String, Optional pie_prefix As String = "", Optional pie_sufix As String = "", Optional pie_title As String, Optional pie_colors As String) As String
         'This Function REturns the <SCRIPT> for a pie chart
 
         pv_pieChartScript = "var ctx = document.getElementById('" & pie_id & "').getContext('2d');" & vbNewLine
-            pv_pieChartScript = pv_pieChartScript & "var myPie = new Chart(ctx, {" & vbNewLine
-                pv_pieChartScript = pv_pieChartScript & "type: 'pie'," & vbNewLine
-                pv_pieChartScript = pv_pieChartScript & "data: {" & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "labels: " & pie_labels & "," & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "datasets: [{" & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "backgroundColor: " & pie_colors & "," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "borderColor: '#000'," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "borderWidth: '0px'," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "data: " & pie_data & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "}]," & vbNewLine
-                pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
-                pv_pieChartScript = pv_pieChartScript & "options: {" & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "title: {" & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "text: '" & pie_title & "'," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "fontStyle: 'bold'," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "fontSize: 20," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "legend: {" & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "labels: {" & vbNewLine
-                            pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "tooltips: {" & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "callbacks: {" & vbNewLine
-                            ' this callback is used to create the tooltip label
-                            pv_pieChartScript = pv_pieChartScript & "label: function(tooltipItem, data) {" & vbNewLine
-                                ' get the data label and data value to display
-                            ' convert the data value to local string so it uses a comma seperated number
-                                pv_pieChartScript = pv_pieChartScript & "var dataLabel = data.labels[tooltipItem.index];" & vbNewLine
-                                pv_pieChartScript = pv_pieChartScript & "var value = '" & pie_prefix & "' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString() + '" & pie_sufix & "';" & vbNewLine
-
-                                ' make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
-                                pv_pieChartScript = pv_pieChartScript & "if (Chart.helpers.isArray(dataLabel)) {" & vbNewLine
-                                    ' show value on first line of multiline label
-                                    ' need to clone because we are changing the value
-                                    pv_pieChartScript = pv_pieChartScript & "dataLabel = dataLabel.slice();" & vbNewLine
-                                    pv_pieChartScript = pv_pieChartScript & "dataLabel[0] += value;" & vbNewLine
-                                pv_pieChartScript = pv_pieChartScript & "} else {" & vbNewLine
-                                    pv_pieChartScript = pv_pieChartScript & "dataLabel += value;" & vbNewLine
-                                pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
-
-                                ' return the text to display on the tooltip
-                                pv_pieChartScript = pv_pieChartScript & "return dataLabel;" & vbNewLine
-                            pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
-                    pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
-                pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
-            pv_pieChartScript = pv_pieChartScript & "});" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "var myPie = new Chart(ctx, {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "type: 'pie'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "data: {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "labels: " & pie_labels & "," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "datasets: [{" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "backgroundColor: " & pie_colors & "," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "borderColor: '#000'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "borderWidth: '0px'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "data: " & pie_data & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}]," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "options: {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "title: {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "text: '" & pie_title & "'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "fontStyle: 'bold'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "fontSize: 20," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "legend: {" & vbNewLine
+        'Legend
+        pv_pieChartScript = pv_pieChartScript & "position:'right'," & vbNewLine
+        
+        pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "labels: {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}," & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "tooltips: {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "callbacks: {" & vbNewLine
+        ' this callback is used to create the tooltip label
+        pv_pieChartScript = pv_pieChartScript & "label: function(tooltipItem, data) {" & vbNewLine
+        ' get the data label and data value to display
+        ' convert the data value to local string so it uses a comma seperated number
+        pv_pieChartScript = pv_pieChartScript & "var dataLabel = data.labels[tooltipItem.index];" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "var value = '" & pie_prefix & "' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString() + '" & pie_sufix & "';" & vbNewLine
+        
+        ' make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+        pv_pieChartScript = pv_pieChartScript & "if (Chart.helpers.isArray(dataLabel)) {" & vbNewLine
+        ' show value on first line of multiline label
+        ' need to clone because we are changing the value
+        pv_pieChartScript = pv_pieChartScript & "dataLabel = dataLabel.slice();" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "dataLabel[0] += value;" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "} else {" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "dataLabel += value;" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+        
+        ' return the text to display on the tooltip
+        pv_pieChartScript = pv_pieChartScript & "return dataLabel;" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "}" & vbNewLine
+        pv_pieChartScript = pv_pieChartScript & "});" & vbNewLine
 
     End Function
 
-    Private Function chartDataSets(index As Variant, chart_colors As String, lables As String, chart_type As String) As String
+    Private Function chartDataSets(index As Variant, chart_colors As String, chart_type As String) As String
         Dim s_data As String, a_colors As Variant, s_bgColor As String
+    
         
         'Colors Sting to Array
         a_colors = Split(chart_colors, ",")
@@ -782,111 +791,89 @@ LC:
                     s_data = s_data & index(j, i)
                 Else
                     s_data = s_data & index(j, i) & ", "
+                End If
             Next j
             s_data = s_data & "]"
             
             'Build datasets
             chartDataSets = chartDataSets & "{" & vbNewLine
             chartDataSets = chartDataSets & "label:'" & index(0, i) & "'," & vbNewLine
-            chartDataSets = chartDataSets & "backgroundColor: '" & s_bgColor & "'," & vbNewLine
-            chartDataSets = chartDataSets & "borderColor: '" & a_colors(i - 1) & "'," & vbNewLine
+            chartDataSets = chartDataSets & "backgroundColor: " & s_bgColor & "," & vbNewLine
+            chartDataSets = chartDataSets & "borderColor: " & a_colors(i - 1) & "," & vbNewLine
             chartDataSets = chartDataSets & "borderWidth: 3," & vbNewLine
             chartDataSets = chartDataSets & "data:" & s_data & vbNewLine
             chartDataSets = chartDataSets & "}," & vbNewLine
         Next i
                
     End Function
-    Private Function pv_barChartScript(chart_id, chart_data As String, chart_labels As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_colors As String = "['#9c7280']", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True) As String
-        pv_barChartScript = ""
-        'pv_barChartScript = pv_barChartScript & "
-        ' & vbNewLine
+    Private Function pv_ChartScript(chart_id As String, chart_type As String, chart_labels As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_colors As String, Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True) As String
+        Dim s_stacked As String, s_chart_type As String, s_user_chart_type As String
+        s_user_chart_type = chart_type
+        If chart_type = "area" Then s_chart_type = "line" Else s_chart_type = chart_type
+        If chart_stacked = True Then s_stacked = "true" Else s_stacked = "false"
         
-        'var ctx = document.getElementById('Chart_1').getContext('2d');
-        ' var chart = new Chart(ctx, {
-        '      ' The type of chart we want to create
-        '      type: 'line',
-        '
-        '      ' The data for our dataset
-        '      data: {
-        '        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        '        datasets: [{
-        'label:           'My First dataset1',
-        'backgroundColor:           'rgba(0, 0, 0,.6)',
-        'borderColor:           'rgba(0, 0, 0, 1)',
-        '          borderWidth: 3,
-        'data:           [3, 22, 51, 12, 20, 12, 15]
-        '        },
-        '        {
-        'label:           'My First dataset2',
-        'backgroundColor:           'rgb(30, 30, 30, .6)',
-        'borderColor:           'rgb(30, 30, 30, 1)',
-        '          borderWidth: 3,
-        'data:           [18, 10, 5, 2, 20, 30, 45]
-        '        },
-        '        {
-        'label:           'My First dataset3',
-        'backgroundColor:           'rgba(80, 80, 80, .6)',
-        'borderColor:           'rgba(80, 80, 80, 1)',
-        '          borderWidth: 3,
-        'data:           [55, 91, 87, 54, 56, 32, 10]
-        '        }]
-        '      },
-        '      options: {
-        '        title: {
-        '          display: true,
-        'text:           'Monthly',
-        'fontStyle:           'bold',
-        '          fontSize: 20,
-        'fontColor:           'black',
-        '        },
-        '        legend: {
-        'position:           'right',
-        'align:           'center',
-        '          display: true,
-        '          labels: {
-        'fontColor:             'rgb(0, 0, 0)'
-        '          }
-        '        },
-        '        scales: {
-        '          yAxes: [{
-        '            stacked: true,
-        '            ticks: {
-        '              beginAtZero: true,
-        'fontColor:               'black'
-        '            },
-        '          }],
-        '          xAxes: [{
-        '            stacked: true,
-        '            ticks: {
-        'fontColor:               'black'
-        '            },
-        '          }]
-        '        },
-        '        tooltips: {
-        '          callbacks: {
-        '            ' this callback is used to create the tooltip label
-        '            label: function(tooltipItem, data) {
-        '              ' get the data label and data value to display
-        '              ' convert the data value to local string so it uses a comma seperated number
-        '              var dataLabel = data.labels[tooltipItem.index];
-        '              var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString() + ' K';
-        '
-        '              ' make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
-        '              if (Chart.helpers.isArray(dataLabel)) {
-        '                ' show value on first line of multiline label
-        '                ' need to clone because we are changing the value
-        '                dataLabel = dataLabel.slice();
-        '                dataLabel[0] += value;
-        '              } else {
-        '                dataLabel += value;
-        '              }
-        '
-        '              ' return the text to display on the tooltip
-        '              return dataLabel;
-        '            }
-        '          }
-        '        }
-        '      }
-        '    });
+        
+        'chartDataSets(Current_Array, chart_colors, chartType)
+        
+        pv_ChartScript = ""
+        
+        pv_ChartScript = pv_ChartScript & "var ctx = document.getElementById('" & chart_id & "').getContext('2d');" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "var chart = new Chart(ctx, {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "type: '" & s_chart_type & "'," & vbNewLine
+
+        pv_ChartScript = pv_ChartScript & "data: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "labels: " & chart_labels & "," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "datasets: [" & chartDataSets(Current_Array, chart_colors, s_user_chart_type) & "]" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "options: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "title: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "display: true," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "text: '" & Current_Array(0, 0) & "'," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "fontStyle: 'bold'," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "fontSize: 20," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "fontColor: 'black'," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "legend: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "position: 'right'," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "align: 'center'," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "display: true," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "labels: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "fontColor: 'rgb(0, 0, 0)'" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "scales: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "yAxes: [{" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "stacked: " & s_stacked & "," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "ticks: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "beginAtZero: true," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "fontColor: 'black'" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}]," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "xAxes: [{"
+        pv_ChartScript = pv_ChartScript & "stacked: " & s_stacked & "," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "ticks: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "fontColor: 'black'" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}]" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}," & vbNewLine
+        pv_ChartScript = pv_ChartScript & "tooltips: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "callbacks: {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "label: function(tooltipItem, data) {" & vbNewLine & vbNewLine
+        
+        pv_ChartScript = pv_ChartScript & "var dataLabel = data.labels[tooltipItem.index];" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "var value = ': " & chart_prefix & "' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString() + '" & chart_sufix & "';" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "if (Chart.helpers.isArray(dataLabel)) {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "dataLabel = dataLabel.slice();" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "dataLabel[0] += value;" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "} else {" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "dataLabel += value;" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "return dataLabel;" & vbNewLine & vbNewLine
+        
+        pv_ChartScript = pv_ChartScript & "}" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "}" & vbNewLine
+        pv_ChartScript = pv_ChartScript & "});" & vbNewLine
     End Function
 
