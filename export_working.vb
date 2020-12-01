@@ -591,14 +591,14 @@ End Enum
                     
                     'HTML_Array Input
                     For i = 1 To HTML_Row_Count
-                        s_html = s_html & "<table>" & vbNewLine
+                        s_html = s_html & "<table style='width:100%;'>" & vbNewLine
                         s_html = s_html & "<tr>" & vbNewLine
                         For j = 1 To HTML_Column_Count
                             
                             If HTML_Array(i, j) <> "" Then
-                                s_html = s_html & "<td style='vertical-align: top;'>" & vbNewLine
+                                s_html = s_html & "<td style='vertical-align: top;'><div class='container-fluid'>" & vbNewLine
                                 s_html = s_html & HTML_Array(i, j) & vbNewLine
-                                s_html = s_html & "</td>" & vbNewLine
+                                s_html = s_html & "</div></td>" & vbNewLine
                             End If
                         Next j
                         s_html = s_html & "</tr>" & vbNewLine
