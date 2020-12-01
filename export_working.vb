@@ -370,7 +370,7 @@ End Enum
 
                 'Optional Arguments added to metric
                 If Len(metric_prefix) > 0 Then s_metric_number = metric_prefix & s_metric_number
-                If Len(metric_sufix) > 0 Then s_metric_number = s_metric_number & metric_sufix
+                If Len(metric_sufix) > 0 Then s_metric_number = s_metric_number & "<span style='font-size:50%'>" & metric_sufix & "</span>"
 
                 s_metric = "<div align='center'>" & vbNewLine & _
                                      "<button type='button' name='button' class='" & s_metric_class & " style='" & metric_style & "' " & "id='" & metric_id & "'>" & _
@@ -389,7 +389,9 @@ End Enum
                     Dim index As Variant
                     Dim s_chart_data As String
                     Dim s_chart_lables As String
+                    Dim pie_title As String
                     index = SQL_to_array(sql)
+                    pie_title = index(0, 0)
                     
                     'Class Canvas
                     HTML_Array(row, column) = HTML_Array(row, column) & "<div>"
@@ -425,7 +427,7 @@ End Enum
                             Next i
                             s_chart_lables = s_chart_lables & "]"
 
-                            HTML_Script = HTML_Script & pv_pieChartScript(chart_id, s_chart_data, s_chart_lables, chart_prefix, chart_sufix)
+                            HTML_Script = HTML_Script & pv_pieChartScript(chart_id, s_chart_data, s_chart_lables, chart_prefix, chart_sufix, pie_title)
                         
 
                         Case chart_type = chartType.area_chart
@@ -731,7 +733,7 @@ LC:
 
     End Function
 
-    Private Function pv_pieChartScript(pie_id, pie_data As String, pie_labels As String, Optional pie_prefix As String = "", Optional pie_sufix As String = "", Optional pie_colors As String = "['#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280']") As String
+    Private Function pv_pieChartScript(pie_id, pie_data As String, pie_labels As String, Optional pie_prefix As String = "", Optional pie_sufix As String = "", Optional pie_title As String, Optional pie_colors As String = "['#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280']") As String
         'This Function REturns the <SCRIPT> for a pie chart
 
         pv_pieChartScript = "var ctx = document.getElementById('" & pie_id & "').getContext('2d');" & vbNewLine
@@ -749,7 +751,7 @@ LC:
                 pv_pieChartScript = pv_pieChartScript & "options: {" & vbNewLine
                     pv_pieChartScript = pv_pieChartScript & "title: {" & vbNewLine
                         pv_pieChartScript = pv_pieChartScript & "display: true," & vbNewLine
-                        pv_pieChartScript = pv_pieChartScript & "text: 'By State'," & vbNewLine
+                        pv_pieChartScript = pv_pieChartScript & "text: '" & pie_title & "'," & vbNewLine
                         pv_pieChartScript = pv_pieChartScript & "fontStyle: 'bold'," & vbNewLine
                         pv_pieChartScript = pv_pieChartScript & "fontSize: 20," & vbNewLine
                         pv_pieChartScript = pv_pieChartScript & "fontColor: 'black'," & vbNewLine
