@@ -21,7 +21,8 @@ Option Compare Database
 '   Bootstrap 4
 '   HTML 5
 '   fontsAwsome
-' jQuery
+'   jQuery
+'   Allform Software Solutions
 '
 'REFRENCES
 '
@@ -46,40 +47,162 @@ Option Compare Database
 '       Counters:
 '           i, j, k, h as Single
 '
-'COLORS
-'   black: #000000  rgb(0,0,0)
+'Public Subs and Functions
+'    Sub HTML_Setup(rows As Integer,
+'                   columns As Integer,
+'                   Optional fileName As String = "",
+'                   Optional filepath As String = "",
+'                   Optional heading As String = "",
+'                   Optional title As String = "")
 '
-'COLOR SETS
-'   default: [red, green, ...]
-'   ...: [..., ..., ...]
+'    Sub add_table(row As Integer,
+'                  column As Integer,
+'                  sql As String,
+'                  Optional table_style As String = "",
+'                  Optional table_class As tableClasses = 0,
+'                  Optional table_id As String = "")
 '
-'ICONS
+'    Sub add_metric(row As Integer,
+'                   column As Integer,
+'                   sql As String,
+'                   Optional metric_prefix As String = "",
+'                   Optional metric_sufix As String,
+'                   Optional metric_style As String = "",
+'                   Optional metric_class As metrics = 3,
+'                   Optional metric_id As String = "")
 '
+'    Sub add_chart(row As Integer,
+'                  column As Integer,
+'                  sql As String,
+'                  chart_type As chartType,
+'                  chart_id As String,
+'                  Optional chart_prefix As String = "",
+'                  Optional chart_sufix As String = "",
+'                  Optional chart_style = "",
+'                  Optional chart_class As String = "",
+'                  Optional chart_height As String = "400px",
+'                  Optional chart_width As String = "100%",
+'                  Optional chart_stacked As Boolean = False,
+'                  Optional chart_legend As Boolean = True,
+'                  Optional chart_colors As String = "'#00876c','#3f956d','#63a36e','#84b071','#a5bd77','#c5c980','#e5d58c','#e5bf75','#e4a862','#e39055','#e1764e','#dc5b4d','#d43d51'")
 '
-'EXAMPLES
+'    Sub add_heading(row As Integer,
+'                    column As Integer,
+'                    heading_tag As headings,
+'                    heading_Text As String,
+'                    Optional heading_style As String = "",
+'                    Optional heading_class As String = "",
+'                    Optional heading_id As String = "")
 '
-'Sub btn_click()
+'    Sub add_div(row As Integer,
+'                column As Integer,
+'                div_text As String)
 '
-'   Const SQL_Sales = "SELECT ..."
-'   Const SQL_Metrics = "SELECT ..."
-'   Const MH = "My Page Heading"
+'    Sub add_styleLink(style_link As String)
+'    Sub add_style(style_text As String)
+'    Sub add_script_top_link(script_Link As String)
+'    Sub add_scriptBottomLink(script_Link As String)
+'    Sub add_scriptBottom(script_Text As String)
 '
-'   Dim d as export
-'   Set d = New export
+'    Sub compile()
+'    Sub export(Optional loadFile As Boolean = False)
+'    Sub compile_and_export(Optional loadFile As Boolean = False)
 '
-'   'Set HTML Document's rows and columns
-'   d.HTML_dimentions(5,5)
+'    Public Function SQL_to_array(sql As String) As Variant
 '
-'   'Add HTML Elements
-'   d.add_heading(2,1,1,MH)
-'   d.add_table(2,1,SQL_Sales)
-'   d.add_chart(2,2,"pie",SQL_Metrics)
+'Public Variables/Methods
+'    Public HTML_Array As Variant
+'    Public HTML_Column_Count As Integer
+'    Public HTML_Row_Count As Integer
+'    Public HTML_Script As String
+'    Public HTML_Style As String
+'    Public HTML_Script_Top_Links As String
+'    Public HTML_Script_Bottom_Links As String
+'    Public HTML_Style_Links As String
+'    Public HTML_File_Name As String
+'    Public HTML_File_Path As String
+'    Public HTML_Elements_Count As Integer
+'    Public HTML_Title As String
+'    Public HTML_Heading As String
+'    Public HTML_Header As Boolean
+'    Public HTML_Composed As String
 '
-'   'Compile and export HTML Document
-'   d.compile_and_export()
+'    Public Current_Colors As Variant
+'    Public Current_Icon As Variant
+'    Public Current_SQL As String
+'    Public Current_Array As Variant
+'    Public Current_Row As Integer
+'    Public Current_Column As Integer
+'    Public Current_Dim_Count As Integer
 '
+'Enumerations
+'    Public Enum tableClasses
+'        Table
+'        table_striped
+'        table_bordered
+'        table_hover
+'        table_dark
+'        table_dark_striped
+'        table_dark_hover
+'        table_borderless
+'    End Enum
+'
+'    Public Enum chartType
+'        line_chart
+'        area_chart
+'        bar_chart
+'        hBar_chart
+'        pie_chart
+'    End Enum
+'
+'    Public Enum headings
+'        h1
+'        h2
+'        h3
+'        h4
+'        h5
+'        h6
+'    End Enum
+'
+'    Public Enum metrics
+'        overdue
+'        due
+'        completed
+'        outstanding
+'    End Enum
+'
+'EXAMPLE
+'Sub myButton_click()
+'    Dim sql As String
+'    Dim x As export
+'    sql = "SELECT Personnel.Service_Type AS [Allform Members], Count(Personnel.Employee_ID) AS [Allform Personnel] FROM Personnel GROUP BY  Personnel.Service_Type;"
+'
+'    Set x = New export
+'    'Set HTML Grid
+'    Call x.HTML_Setup(5, 5)
+'
+'    'Charts
+'    Call x.add_heading(1, 1, h1, "My Dashboard Example - Proof of Concept", "text-align:center;")
+'    Call x.add_chart(3, 2, sql, pie_chart, "Chart_1", "", "", "", "", "250px", "")
+'    sql = "SELECT Personnel.Service_Type AS [Allform Members], Count(Personnel.Employee_ID) AS pers1, Count(Personnel.Employee_ID) AS pers2 FROM Personnel GROUP BY  Personnel.Service_Type;"
+'    Call x.add_chart(3, 3, sql, area_chart, "Chart_2", "", "", "", "", "250px", "", True)
+'    Call x.add_chart(3, 3, sql, bar_chart, "Chart_4", "", "", "", "", "250px", "", False)
+'    Call x.add_chart(3, 2, sql, hBar_chart, "Chart_3", "", "", "", "", "250px", "", True)
+'
+'    'Metrics
+'    sql = "SELECT Count(Personnel.Employee_ID) AS [Allform Personnel] FROM Personnel"
+'    Call x.add_metric(2, 1, sql, "", " mbrs", "", completed)
+'    Call x.add_metric(2, 2, sql, "", " mbrs", "", due)
+'    Call x.add_metric(2, 3, sql, "", " mbrs", "", outstanding)
+'    Call x.add_metric(2, 4, sql, "", " mbrs", "", overdue)
+'
+'    'Tables
+'    sql = "SELECT * FROM view_pers_details"
+'    Call x.add_table(5, 1, sql, "", table_striped)
+'
+'    'Compile and Export
+'    Call x.compile_and_export(True)
 'End Sub
-
 
 'Public Constants:
 
