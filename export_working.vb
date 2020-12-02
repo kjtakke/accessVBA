@@ -383,7 +383,7 @@ End Enum
             End Sub
 
 
-            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True, Optional chart_colors As String = "'#9c7272', '#9c8d72', '#729c7d', '#729c8e', '#727a9c', '#80729c', '#94729c', '#9c7280'")
+            Sub add_chart(row As Integer, column As Integer, sql As String, chart_type As chartType, chart_id As String, Optional chart_prefix As String = "", Optional chart_sufix As String = "", Optional chart_style = "", Optional chart_class As String = "", Optional chart_height As String = "400px", Optional chart_width As String = "100%", Optional chart_stacked As Boolean = False, Optional chart_legend As Boolean = True, Optional chart_colors As String = "'#00876c','#3f956d','#63a36e','#84b071','#a5bd77','#c5c980','#e5d58c','#e5bf75','#e4a862','#e39055','#e1764e','#dc5b4d','#d43d51'")
 
                     Dim index As Variant
                     Dim s_chart_data As String
