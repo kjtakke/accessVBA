@@ -3,7 +3,7 @@ Option Compare Database
 'EXPORT CLASS
 'This class is designed to create web dashboards in Microsoft Access
 '
-'REQUIRED PACKAGES
+'REQUIRED PACKAGES AND LIBRARIES
 '   Visual Basic For Applications
 '   Microsoft Access 16.0 Object Library
 '   OLE Automation
