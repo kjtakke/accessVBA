@@ -599,6 +599,9 @@ End Enum
                     s_html = s_html & "</head>" & vbNewLine
                     s_html = s_html & "<body>" & vbNewLine
                     
+                    'Wrapper
+                    s_html = s_html & "<div class='paper'>"
+                    
                     'HTML_Array Input
                     For i = 1 To HTML_Row_Count
                         s_html = s_html & "<table style='width:100%;'>" & vbNewLine
@@ -615,6 +618,9 @@ End Enum
                         s_html = s_html & "</table>" & vbNewLine
                     Next i
                     
+                    'End Wrapper
+                    s_html = s_html & "</div>"
+    
                     'User Scipt Links and Scrip Tag
                     s_html = s_html & HTML_Script_Bottom_Links & vbNewLine
                     s_html = s_html & "<script>" & vbNewLine & HTML_Script & vbNewLine & "</script>" & vbNewLine
