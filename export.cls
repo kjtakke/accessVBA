@@ -1021,6 +1021,37 @@ LC:
         Dim a_SQL As Variant
         Dim a_varField As Variant
         Dim i_dimCount As Integer
+        Dim a_split As Variant, a_string As Variant
+        Dim s_str As String, s_form As String, s_control As String
+
+        sql = Replace(sql, "=", " = ")
+        sql = Replace(sql, "(", " ( ")
+        sql = Replace(sql, ")", " ) ")
+        a_split = Split(sql)
+        
+        For i = 0 To UBound(a_split)
+            If Left(a_split(i), 8) = "[Forms]!" Then
+            s_str = Replace(a_split(i), "[Forms]!", "")
+            s_str = Replace(s_str, "[", "")
+            s_str = Replace(s_str, "]", "")
+            
+            a_string = Split(s_str, "!")
+            s_form = a_string(0)
+            s_control = a_string(1)
+            
+            a_split(i) = "'" & Forms(s_form).Controls(s_control).Value & "'"
+            End If
+        
+        Next i
+        sql = ""
+        For i = 0 To UBound(a_split)
+            sql = sql & a_split(i) & " "
+        Next i
+        
+        sql = Replace(sql, " = ", "=")
+        sql = Replace(sql, " ( ", "(")
+        sql = Replace(sql, " ) ", ")")
+        
         Set o_rst = CurrentDb.OpenRecordset(sql)
 
         'Set Array Dimentions
